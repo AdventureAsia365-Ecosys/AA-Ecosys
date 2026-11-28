@@ -26,7 +26,7 @@ Commands:
     python3 tools/ops/ops_calendar.py check [--today D] [--warn-overdue]   validate, page + .ics up to date, overdue
     python3 tools/ops/ops_calendar.py status [--today D] [--all]           the lines that need attention (session start)
     python3 tools/ops/ops_calendar.py render --write                       the table in docs/ops/calendar.md
-    python3 tools/ops/ops_calendar.py ics --write                          docs/ops/calendar.ics (deterministic)
+    python3 tools/ops/ops_calendar.py ics --write                          docs/ops/calendar.ics (deterministic, YAML only)
 
 ``check`` exits 1 on a validation error, a stale page or .ics, and (unless ``--warn-overdue``, the pull-request mode)
 on an overdue line. The daily compliance collector publishes the same evaluation as the check ``ops_calendar_overdue``
@@ -624,9 +624,14 @@ def _rrule(cadence: str) -> str:
     return f"FREQ=DAILY;INTERVAL={EVERY.match(cadence).group(1)}"
 
 
-def ics(doc: dict, root: Path = REPO_ROOT) -> str:
-    """The phone feed: deterministic (no today, DTSTAMP = the calendar's `updated`), one all-day event per dated line,
-    a repeating event per recurring line (from its anchor), one event per distinct date of a register line."""
+def ics(doc: dict) -> str:
+    """The phone feed: a pure function of calendar.yaml (no today, no register, DTSTAMP = the calendar's `updated`),
+    one all-day event per dated line and a repeating event per recurring line (from its anchor).
+
+    A ``dates_from`` line gets no event: its dates live in another register (secrets register, go-live checklist,
+    vulnerability exceptions), and copying them into the committed feed would make it stale on every edit of that
+    register, turning the freshness guard red on unrelated pull requests. Their live state is on the CIS Calendar tab
+    and in ``status``."""
     stamp = _date(doc.get("updated")).strftime("%Y%m%dT000000Z")
     out = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//AA Ecosystem//Ops calendar//EN", "CALSCALE:GREGORIAN",
            "METHOD:PUBLISH", "X-WR-CALNAME:AA ops calendar", "X-WR-TIMEZONE:UTC"]
@@ -642,14 +647,7 @@ def ics(doc: dict, root: Path = REPO_ROOT) -> str:
             desc += f"\nEvidence: {ev}"
             out += _event(uid, stamp, _date(it["anchor"]), f"{iid} {title}", desc, _rrule(it["cadence"]), warn)
         elif kind == "deadline" and it.get("dates_from"):
-            per_day: dict[date, int] = {}
-            for d in register_dates(root, it["dates_from"]):
-                per_day[d] = per_day.get(d, 0) + 1
-            for d in sorted(per_day):
-                out += _event(f"{iid.lower()}-{d.strftime('%Y%m%d')}@ops-calendar.aa-ecosys", stamp, d,
-                              f"{iid} {per_day[d]} due: {title}",
-                              desc + f"\nRead from the {REGISTER_NAMES[it['dates_from']]}.",
-                              None, warn)
+            continue   # dates read from a register: live state only (see the docstring)
         elif kind == "deadline":
             day = _date(it.get("date")) or _date(it.get("window_from"))
             prefix = "(done) " if it.get("done") else ("opens: " if not it.get("date") else "")
@@ -685,7 +683,7 @@ def cmd_check(args: argparse.Namespace) -> int:
             if splice(page, render(doc)) != page:
                 errors.append(f"{PAGE}: the table is stale; run python3 tools/ops/ops_calendar.py render --write")
             feed = root / ICS
-            if not feed.exists() or feed.read_bytes() != ics(doc, root).encode("utf-8"):
+            if not feed.exists() or feed.read_bytes() != ics(doc).encode("utf-8"):
                 errors.append(f"{ICS}: stale; run python3 tools/ops/ops_calendar.py ics --write")
     except (CalendarError, GateError, OSError) as exc:
         errors.append(str(exc))
@@ -761,7 +759,7 @@ def cmd_render(args: argparse.Namespace) -> int:
 
 def cmd_ics(args: argparse.Namespace) -> int:
     root = Path(args.root)
-    feed = ics(load(root, args.calendar), root)
+    feed = ics(load(root, args.calendar))
     if not args.write:
         sys.stdout.write(feed)
         return 0

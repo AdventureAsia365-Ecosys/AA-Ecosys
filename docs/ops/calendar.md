@@ -23,7 +23,8 @@ session-start routine, and nothing turned red when one passed.
 
 - **Source:** [`calendar.yaml`](calendar.yaml). Edit that file, never the table below or the `.ics` feed. The header
   of the file lists every field.
-- **Kinds:** `recurring` (a cadence; the newest matching audit folder or a compliance check dates the last run),
+- **Kinds:** `recurring` (a cadence; the newest matching audit folder dates the last run, or a compliance check
+  grades it against its admin age setting: access review, restore drill, monthly security review),
   `deadline` (a due date, or a "not before" window), `trigger` (due a number of days after an event) and `automated`
   (a job or workflow with its own alarm, listed so the calendar is complete).
 - **Dates read, not copied:** secret rotations and certificate or domain expiries come from the rotation blocks of the
@@ -44,8 +45,10 @@ session-start routine, and nothing turned red when one passed.
 The feed [`calendar.ics`](calendar.ics) is generated from the YAML (`python3 tools/ops/ops_calendar.py ics --write`;
 the same commit as the YAML change). In Google Calendar: **Other calendars › From URL**, paste the raw URL of
 `docs/ops/calendar.ics` on the default branch of the public repository, **Add calendar**. Google refreshes a
-subscribed feed every few hours to a day. Each dated line is an all-day event, each recurring line repeats from its
-anchor, and each register date is one event with the number of rows due that day.
+subscribed feed every few hours to a day. Each dated line is an all-day event and each recurring line repeats from
+its anchor. The feed depends on `calendar.yaml` alone: the lines that read their dates from a register (secrets,
+go-live checklist, vulnerability exceptions) have no event, so editing a register never makes the feed stale. Their
+dates are on the CIS Calendar tab and in `status`.
 
 ## Change a line
 
@@ -67,7 +70,7 @@ Calendar version 1, updated 2026-11-28: **61 lines** (8 recurring, 36 deadline, 
 | OC-001 | recurring | Weekly database performance review (C4.3: top statements, slow log, locks) | weekly from 2026-11-30 | agent | `docs/audits/**/*c43-w*` | auto | — |
 | OC-002 | recurring | Merge the weekly release PRs of the four app repos | weekly from 2026-11-30 | agent | `none` | session | — |
 | OC-003 | recurring | Monthly capacity and cost review (C8) | monthly from 2026-12-01 | agent | `docs/audits/*capacity-review*` | auto | — |
-| OC-004 | recurring | Quarterly access review, co-signed by the business owner | quarterly from 2027-01-04 | tech lead | `docs/audits/*access-review*` | auto | — |
+| OC-004 | recurring | Quarterly access review, co-signed by the business owner | quarterly from 2027-01-04 | tech lead | `check:last_access_review` | auto | — |
 | OC-005 | recurring | Monthly security posture review recorded on Compliance readiness > Reviews | monthly from 2026-12-01 | tech lead | `check:monthly_review_recent` | auto | — |
 | OC-006 | recurring | Restore drill passed and logged in the drill index | quarterly from 2027-02-01 | tech lead | `check:last_restore_drill` | auto | — |
 | OC-007 | recurring | Weekly platform report for the business owner | weekly from 2026-11-30 | agent | `none` | session | — |

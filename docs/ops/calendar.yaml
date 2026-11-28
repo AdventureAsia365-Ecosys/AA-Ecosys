@@ -32,7 +32,8 @@
 #   warn_days    days before the due date that turn the line amber (required on every line that can be overdue)
 #   dates_from   deadline: secrets-register (rotation next_due / expires of every live row, AA-1183),
 #                go-live-checklist (due dates of the open go-live gate lines, AA-1117) or vuln-exceptions (expiry of
-#                every vulnerability exception); the line is due on the earliest date and overdue when any date passed
+#                every vulnerability exception); the line is due on the earliest date and overdue when any date passed;
+#                these dates are live state only (CIS tab, `status`) and never go into the .ics feed
 #   reminder     auto (the compliance check turns red by itself) | session (the session-start block lists it) | none
 #   note         one short line of context (shown on the tab)
 #
@@ -82,13 +83,12 @@ items:
     kind: recurring
     title: "Quarterly access review, co-signed by the business owner"
     owner: tech lead
-    source: "AA-838 DM-8.10, AA-1185 (IAM credential report and last-accessed data)"
+    source: "AA-838 DM-8.10, AA-1185 (IAM reports), setting cis.compliance.access_review_max_age_days"
     cadence: quarterly
     anchor: 2027-01-04
-    evidence: "docs/audits/*access-review*"
-    warn_days: 14
+    evidence: "check:last_access_review"
     reminder: auto
-    note: "Includes the IAM credential report and last-accessed data; the compliance check also grades its age."
+    note: "The compliance check decides overdue from its admin age setting; the cadence feeds the phone reminder only."
 
   - id: OC-005
     kind: recurring

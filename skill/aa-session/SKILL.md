@@ -85,7 +85,8 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
    việc phải xử lý trong phiên, hoặc dời ngày có lý do trong calendar). Workflow "Ops calendar" chạy thứ Hai đỏ khi có
    dòng quá hạn (`guard_runs.py` hiện nó); check `ops_calendar_overdue` đỏ trên CIS › Compliance readiness ngay hôm
    dòng quá hạn. Xong một việc → `done: <ngày>` trong calendar, rồi `render --write` + `ics --write` cùng PR.
-   Hạn của ba rà soát dưới đây cũng do calendar tính (OC-001, OC-003, OC-004 đọc folder audit mới nhất):
+   Hạn của ba rà soát dưới đây cũng do calendar tính (OC-001, OC-003 đọc folder audit mới nhất; OC-004 do check
+   `last_access_review` chấm theo setting admin `cis.compliance.access_review_max_age_days`):
    - **Tuần (C4.3):** phiên đầu mỗi tuần ISO, và sau mỗi wave: `pg_stat_statements` top 20 theo role (tổng + mean),
      slow log > 500 ms, lock wait, PI top SQL. Ghi 1 đoạn trong log phiên ("C4.3 tuần W<nn>"); hạn = log phiên gần nhất
      có dòng đó cách ≥ 7 ngày. Mục tiêu C1.2 trượt 2 tuần liên tiếp → báo Nghiệp (C1.2a).
@@ -94,8 +95,9 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
      thuộc tháng trước. Mẫu `docs/templates/capacity-review.md`; cách làm + script: folder đầu tiên
      `docs/audits/2026-10-28-S255-aa838-capacity/`.
    - **Quý (DM-8.10):** phiên đầu mỗi quý: rà soát quyền (role, grant, default ACL, IAM đọc secret DB, user Cognito
-     `aa-workforce`), lưu `docs/audits/<date>-S<nnn>-access-review/` theo mẫu `docs/templates/access-review.md`. Hạn = folder
-     `*access-review*` mới nhất thuộc quý trước.
+     `aa-workforce`), lưu `docs/audits/<date>-S<nnn>-access-review/` theo mẫu `docs/templates/access-review.md` và liệt kê
+     nó trong `docs/security/README.md`. Hạn = check `last_access_review` (ngày rà soát mới nhất trong README đó) quá
+     setting `cis.compliance.access_review_max_age_days` (mặc định 100 ngày, sửa ở trang admin).
    - Không bao giờ chạy `pg_stat_statements_reset()` trừ ngay sau một rà soát tháng đã lưu snapshot top 50 (C4.3a).
 
 7. **Ngay sau khi Nghiệp chốt danh sách — cập nhật master plan (BẮT BUỘC, tech lead nhắc S264 và S271):**

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import io
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -251,9 +252,8 @@ class IcsTest(unittest.TestCase):
         doc = _doc(_deadline(note="A long note " * 12), _recurring(cadence="quarterly"),
                    _trigger(trigger_date="2026-11-01"), _trigger(id="OC-107"), _automated(),
                    _deadline(id="OC-108", date=None, window_from="2027-01-04", warn_days=None))
-        with _Repo() as root:
-            feed = oc.ics(doc, root)
-            self.assertEqual(feed, oc.ics(doc, root))
+        feed = oc.ics(doc)
+        self.assertEqual(feed, oc.ics(doc))
         self.assertTrue(feed.startswith("BEGIN:VCALENDAR\r\n") and feed.endswith("END:VCALENDAR\r\n"))
         lines = feed.split("\r\n")[:-1]
         self.assertTrue(all(len(line.encode("utf-8")) <= 75 for line in lines))
@@ -266,11 +266,19 @@ class IcsTest(unittest.TestCase):
         self.assertIn("SUMMARY:opens: OC-108", unfolded)
         self.assertIn("DTSTAMP:20261201T000000Z", unfolded)              # the calendar's updated date, never now
 
-    def test_register_line_gives_one_event_per_date(self):
-        with _Repo() as root:
-            feed = oc.ics(_doc(_deadline(date=None, dates_from="vuln-exceptions")), root).replace("\r\n ", "")
-        self.assertEqual(feed.count("BEGIN:VEVENT"), 2)
-        self.assertIn("UID:oc-101-20261212@ops-calendar.aa-ecosys", feed)
+    def test_register_lines_stay_out_of_the_feed_so_a_register_edit_never_makes_it_stale(self):
+        def refuse(*_a, **_k):
+            raise AssertionError("ics() must not read a register")
+
+        doc = _doc(_deadline(), *(_deadline(id=f"OC-1{n}0", date=None, dates_from=src)
+                                  for n, src in enumerate(oc.DATES_FROM, start=1)))
+        saved, oc.register_dates = oc.register_dates, refuse
+        try:
+            feed = oc.ics(doc).replace("\r\n ", "")
+        finally:
+            oc.register_dates = saved
+        self.assertEqual(feed.count("BEGIN:VEVENT"), 1)                   # only the dated line
+        self.assertNotIn("OC-110", feed)
 
 
 class CommittedCalendarTest(unittest.TestCase):
@@ -281,8 +289,30 @@ class CommittedCalendarTest(unittest.TestCase):
         self.assertEqual(oc.validate(doc, REAL_ROOT), [])
         page = (REAL_ROOT / oc.PAGE).read_text(encoding="utf-8")
         self.assertEqual(oc.splice(page, oc.render(doc)), page, "run: python3 tools/ops/ops_calendar.py render --write")
-        self.assertEqual((REAL_ROOT / oc.ICS).read_bytes(), oc.ics(doc, REAL_ROOT).encode("utf-8"),
+        self.assertEqual((REAL_ROOT / oc.ICS).read_bytes(), oc.ics(doc).encode("utf-8"),
                          "run: python3 tools/ops/ops_calendar.py ics --write")
+
+    def test_a_duty_a_compliance_check_grades_is_watched_never_graded_by_a_glob(self):
+        """One limit per duty: a recurring line for a duty that a compliance check already grades against an
+        admin-editable age setting reads that check (evidence check:<id>) and has no warn_days of its own; a repo glob
+        would give the duty a second limit and a second evidence source."""
+        graded = {"last_access_review": re.compile(r"access review", re.I),
+                  "last_restore_drill": re.compile(r"restore drill", re.I),
+                  "monthly_review_recent": re.compile(r"security posture review", re.I)}
+        collector = (REAL_ROOT / "tools/compliance/collect.py").read_text(encoding="utf-8")
+        for check_id in ("last_access_review", "last_restore_drill"):
+            self.assertIn(f'("{check_id}", lambda', collector, f"{check_id} is no longer a collector check")
+        doc = oc.load(REAL_ROOT)
+        seen = set()
+        for it in doc["items"]:
+            if it.get("kind") != "recurring":
+                continue
+            for check_id, rx in graded.items():
+                if rx.search(it["title"]):
+                    seen.add(check_id)
+                    self.assertEqual(it.get("evidence"), f"check:{check_id}", it["id"])
+                    self.assertNotIn("warn_days", it, f"{it['id']}: the check's setting decides overdue")
+        self.assertEqual(seen, set(graded))
 
     def test_detail_of_the_real_calendar_fits_without_truncation(self):
         doc = oc.load(REAL_ROOT)
