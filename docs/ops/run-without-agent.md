@@ -201,13 +201,14 @@ The business owner is the second on-call person (root decision sec-Q16). The pri
 
 | When | Who acts | Within |
 |---|---|---|
-| A page alert arrives | the tech lead acknowledges in the alerts channel and starts | 15 minutes |
+| A page alert arrives | the tech lead acknowledges to the business owner (a Zalo message while alerts are e-mail only, a reply on the Slack card once that channel is on) and starts | 15 minutes |
 | No acknowledgement | the business owner phones the tech lead, then again with a Zalo message | 30 minutes from the alert |
 | SEV1 confirmed | the tech lead tells the business owner, who decides on tenant notice | 30 minutes |
 | Tenants affected | the business owner words it, the tech lead sends it | 2 hours |
 
 Alerts reach the e-mail inboxes today; the Slack channel and the business owner's page-alert subscription are switched
-on with [turn on the second alert channel](runbooks/chat-alert-channel.md).
+on with [turn on the second alert channel](runbooks/chat-alert-channel.md). The business owner can only react to an
+alert they receive: their page-alert subscription (piece C of that page) comes before the first tabletop.
 
 ## What the agent does that you now do yourself
 

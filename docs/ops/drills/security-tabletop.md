@@ -40,6 +40,19 @@ with the AWS admin profile, the [incident response](../incident-response.md), [b
 and [second key-holder checklist](../../security/second-key-holder-checklist.md) pages open. Book a time outside
 :35-:45 past the hour (when the hourly Migration Apply starts) in case the extra part is run.
 
+## Before the tabletop
+
+Do these at least three days before the date; the tabletop does not start without them:
+
+1. **The business owner receives the page alerts.** Piece C of
+   [turn on the second alert channel](../runbooks/chat-alert-channel.md#c-business-owner-on-the-page-topic): the
+   business owner's work address is on **Platform › Alerts › Recipients** with **Page alerts only** (or all alerts),
+   and the page shows it as **confirmed**. Without it the business owner never sees the alert the card below reacts
+   to, and Part B cannot check that the break-glass alerts reach them.
+2. **The acknowledgement path is agreed.** Until the Slack channel is on, there is no channel both people see: the
+   tech lead acknowledges a page alert with a short Zalo message to the business owner (phone call if Zalo is down),
+   as the card says. Check both phones have each other's Zalo and phone number.
+
 ## Agenda (60 minutes)
 
 | Minute | Part |
@@ -57,24 +70,25 @@ The card (print it, or keep it on the business owner's phone):
 
 | When | Who | Does | Within |
 |---|---|---|---|
-| A page alert arrives (e-mail subject or Slack card names a security, identity, NAT or database alarm) | tech lead | acknowledges in the alerts channel, starts the [first 15 minutes](../incident-response.md#first-15-minutes) | 15 min |
-| No acknowledgement from the tech lead | business owner | **calls the tech lead by phone**; no answer: calls again after 10 minutes and sends a Zalo message | 30 min from the alert |
+| A page alert arrives (e-mail subject or Slack card names a security, identity, NAT or database alarm) | tech lead | acknowledges to the business owner: a short Zalo message ("seen, on it"; phone call if Zalo is down) while alerts are e-mail only, a reply on the alert card once the Slack channel is on; then starts the [first 15 minutes](../incident-response.md#first-15-minutes) | 15 min |
+| No acknowledgement from the tech lead (no Zalo message, no reply on the Slack card) | business owner | **calls the tech lead by phone**; no answer: calls again after 10 minutes and sends a Zalo message | 30 min from the alert |
 | Tech lead reached | tech lead | owns the incident, tells the business owner the severity | - |
 | SEV1 confirmed (customers cannot work, data exposed, secret leaked) | tech lead | tells the business owner (who decides on tenant notice) | 30 min |
 | Tenants affected | business owner (wording), tech lead (sends) | e-mail to the affected tenants | 2 h |
 | Tech lead unreachable for 2 hours during a SEV1 | business owner | uses the break-glass path only if a person must sign in (Part B), otherwise waits; writes down the times | - |
 | Personal data involved | business owner, with counsel | the [personal data breach](../incident-response.md#personal-data-breach) branch | 72 h at the latest |
 
-Inject (minute 7): "Saturday 23:10. Your phone shows a page alert: the database instance stopped. Nothing in the
-alerts channel from the tech lead." Ask, in order:
+Inject (minute 7): "Saturday 23:10. Your phone shows a page alert e-mail: the database instance stopped. No Zalo
+message from the tech lead (and, if the Slack channel is on, no reply on the alert card)." Ask, in order:
 
 1. What do you do first, and by when? Expected: call the tech lead before 23:40; again at 23:50 with a Zalo message.
 2. Do you try to fix the database yourself? Expected: no. The business owner's job is to reach the tech lead and to
    decide on notices; the database runbooks need the tech lead's access.
 3. Where do you write what happened? Expected: times of the alert and each call, in a note sent to the tech lead.
-4. Which channels get the alert today? Expected: the e-mail inboxes and, once switched on, the Slack channel
-   ([second alert channel](../runbooks/chat-alert-channel.md)). If the business owner did not get this alert, that is a
-   gap: piece C of that page (page alerts only, to the business owner's inbox).
+4. Which channels get the alert today, and where does the tech lead acknowledge? Expected: the e-mail inboxes
+   (the business owner's through piece C, done before the tabletop) and, once switched on, the Slack channel
+   ([second alert channel](../runbooks/chat-alert-channel.md)); the acknowledgement is a Zalo message to the business
+   owner until the Slack channel is on, then a reply on the card.
 
 ## Part B: break-glass sign-in test (20 minutes, real)
 
@@ -102,7 +116,11 @@ are expected and are part of the test (the business owner should see them arrive
 7. Record: the times of steps 1 to 5, the alert times, and whether each alert reached the business owner.
 
 Abort: anything unexpected (a sign-in that does not ask for TOTP, a token without the break-glass client, an alert that
-does not arrive) stops the test at step 5 (close) and becomes a finding.
+does not arrive) stops the test and becomes a finding. Run step 5 (close) at once, and once step 2 has happened (the
+seed and password were shown) always run step 6 (rotate, then `breakglass-verify`) before anyone leaves, even if the
+sign-in never worked; the business owner deletes the authenticator entry. A disabled user with an unrotated secret is
+not a safe stop: re-enabling it later would accept the seed and password that were shown (break-glass rule: every use
+is followed by a rotation).
 
 ## Part C: CRM data-key rotation walk-through (12 minutes)
 

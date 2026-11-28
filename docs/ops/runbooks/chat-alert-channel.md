@@ -69,34 +69,91 @@ workspace owner too), and the tech lead is a Slack workspace admin. AWS profile 
 
    Expected: `Set Actions secret ...` twice. Change both rows of the
    [secrets register](../../security/secrets-register.md) from **planned** to **keep** in the next root PR.
-6. Give the Terraform apply role its chatbot permissions. It is a bootstrap object: a local apply with the MFA admin
-   profile, from `accounts/aa365` on AA-CIS-Infra `main`, with the usual `TF_VAR_` inputs exported:
+6. Give the Terraform apply role its chatbot permissions. The policy is a bootstrap object (CI apply cannot change
+   it), so a person applies it locally, targeted, with the MFA admin profile, from a clean checkout of AA-CIS-Infra
+   `main` that already has the chat channel merged. Run each line as it is (single-line commands; the credentials go
+   through `env`, never a bare `export $(...)`, which prints the whole environment when the command fails, S244).
 
-   ```bash
-   terraform plan -target=aws_iam_policy.tf_apply_sec
-   terraform apply -target=aws_iam_policy.tf_apply_sec
-   ```
+   a. Sign in with MFA (enter the code when asked). Expected: the acc2 account and the MFA admin role.
 
-   Expected: `1 to change` (the policy `aa-cis-infra-tf-apply-sec` gains the statements `ChatAlertsConfigCreate` and
-   `ChatAlertsConfigManage`), then `Apply complete! Resources: 0 added, 1 changed, 0 destroyed.`
+      ```bash
+      aws sts get-caller-identity --profile aa365-admin
+      ```
+
+   b. Update the checkout. Expected: `On branch main`, nothing to commit, and the file `accounts/aa365/chat_alerts.tf`
+      exists.
+
+      ```bash
+      git -C /home/nghiep/projects/AA-Ecosys/infra/AA-CIS-Infra checkout main && git -C /home/nghiep/projects/AA-Ecosys/infra/AA-CIS-Infra pull --ff-only && git -C /home/nghiep/projects/AA-Ecosys/infra/AA-CIS-Infra status
+      ```
+
+   c. Initialise Terraform (it reads the S3 state backend). Expected: `Terraform has been successfully initialized!`
+
+      ```bash
+      bash -c 'cd /home/nghiep/projects/AA-Ecosys/infra/AA-CIS-Infra/accounts/aa365 && C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform init -input=false'
+      ```
+
+   d. Plan the one policy into a saved plan file. Terraform validates every variable even under `-target`, and
+      `db_password` has no default (CI passes it from a repo secret nobody can read back). The line passes the
+      placeholder `unused`: the target policy does not read it and the RDS instance ignores password changes
+      (`ignore_changes`), so it never reaches AWS. No other input is needed while `org_access_role_enabled = false` in
+      `terraform.tfvars`; if it is `true`, also pass `TF_VAR_org_management_account_id` and
+      `TF_VAR_org_management_org_id` the same way (values from the `aa-mgmt` profile, AA-CIS-Infra
+      `accounts/management/README.md` section 6).
+
+      ```bash
+      bash -c 'cd /home/nghiep/projects/AA-Ecosys/infra/AA-CIS-Infra/accounts/aa365 && C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE TF_VAR_db_password=unused $(tr "\n" " " <<<"$C") terraform plan -input=false -target=aws_iam_policy.tf_apply_sec -out=/tmp/chat-sec.tfplan'
+      ```
+
+      Expected: `Plan: 0 to add, 1 to change, 0 to destroy.` The only change is the policy
+      `aa-cis-infra-tf-apply-sec`, which gains the statements `ChatAlertsConfigCreate`, `ChatAlertsConfigManage` and
+      `ChatAlertsServiceLinkedRole` (the service-linked role `AWSServiceRoleForAWSChatbot` that the first channel
+      configuration creates with the caller's rights). Anything else in the plan: stop and ask the tech lead.
+
+   e. Apply the saved plan (the plan file holds the inputs), then delete the plan file.
+
+      ```bash
+      bash -c 'cd /home/nghiep/projects/AA-Ecosys/infra/AA-CIS-Infra/accounts/aa365 && C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform apply -input=false /tmp/chat-sec.tfplan' # WRITE
+      rm -f /tmp/chat-sec.tfplan
+      ```
+
+      Expected: `Apply complete! Resources: 0 added, 1 changed, 0 destroyed.` An MFA or `ExpiredToken` error: repeat
+      step a, then d and e.
 7. Open an AA-CIS-Infra PR that adds one line to `accounts/aa365/terraform.tfvars`: `chat_alerts_enabled = true`
    (`Refs AA-1110`). Optional second line `chat_alerts_topic = "page"` to send only the urgent alerts.
    Expected: the PR's Terraform Plan shows `3 to add`: `aws_iam_role.chat_alerts[0]`,
    `aws_iam_role_policy.chat_alerts[0]` and `aws_chatbot_slack_channel_configuration.alerts[0]`. A plan error
    "chat_alerts_enabled = true needs ..." means a secret of step 5 is missing.
 8. Merge it, then run AA-CIS-Infra **Actions**, `Terraform Apply Dev`, **Run workflow** on `main` (root `aa365`).
-   Expected: green, `3 added`.
+   Expected: green, `3 added`. `AccessDenied` on `iam:CreateServiceLinkedRole` or on a `chatbot:` action means
+   step 6 was not applied: do it, then run the workflow again.
 9. Test. In the console, open the configuration `aa-ecosys-dev-chat-alerts` and press **Send test message**.
-   Expected: a test message in the Slack channel within a minute. Then a real alarm path, on a ticket-severity alarm
-   (every e-mail recipient also gets it):
+   Expected: a test message in the Slack channel within a minute. Then a real alarm path. Which alarm depends on the
+   topic chosen in step 7:
 
-   ```bash
-   aws cloudwatch set-alarm-state --alarm-name aa-cis-dev-rds-cpu-high --state-value ALARM --state-reason "AA-1110 chat channel test" --profile aa365-admin --region us-west-1
-   ```
+   - `chat_alerts_topic` not set (all alerts, the default): flip a ticket-severity alarm (every e-mail recipient of
+     the alerts topic also gets it):
 
-   Expected: an alarm card in Slack within about a minute; the alarm returns to `OK` at its next evaluation (within
-   15 minutes) and posts again. Nothing arrives: set `logging_level` to `"ERROR"` in `chat_alerts.tf` in a PR, apply,
-   repeat, and read the log group `/aws/chatbot/aa-ecosys-dev-chat-alerts` in us-east-1.
+     ```bash
+     aws cloudwatch set-alarm-state --alarm-name aa-cis-dev-rds-cpu-high --state-value ALARM --state-reason "AA-1110 chat channel test" --profile aa365-admin --region us-west-1
+     ```
+
+     Expected: an alarm card in Slack within about a minute; the alarm returns to `OK` at its next evaluation
+     (within 15 minutes) and posts again.
+
+   - `chat_alerts_topic = "page"`: a ticket alarm never reaches the page topic, so the line above posts nothing in
+     Slack (correct, not a fault). Flip the page-severity alarm of the alert path instead. It has no automatic
+     action and sends no OK message; it reaches every recipient of both topics, so tell the business owner first:
+
+     ```bash
+     aws cloudwatch set-alarm-state --alarm-name aa-ecosys-dev-alerts-delivery-failed --state-value ALARM --state-reason "AA-1110 chat channel test, not a delivery failure" --profile aa365-admin --region us-west-1
+     ```
+
+     Expected: an alarm card in Slack within about a minute, and the page e-mail; the alarm returns to `OK` silently
+     at its next evaluation (within 5 minutes).
+
+   Nothing arrives for the alarm that matches the topic: set `logging_level` to `"ERROR"` in `chat_alerts.tf` in a
+   PR, apply, repeat, and read the log group `/aws/chatbot/aa-ecosys-dev-chat-alerts` in us-east-1.
 10. Record: the date, the Slack message screenshot and the run link in the AA-1110 evidence folder.
 
 Switch off: a PR that removes the tfvars line, then `Terraform Apply Dev` (`3 destroyed`). The workspace
@@ -111,7 +168,8 @@ off). Tech lead decision S294: the inbox is a company role inbox, never a person
 2. Run `Terraform Apply Dev` on `main`. Expected: `1 added` (the subscription) and the CIS task role policy updated in
    place.
 3. The inbox owner clicks **Confirm subscription** in the AWS e-mail.
-4. Test with the `set-alarm-state` line of piece A step 9. Expected: the alarm e-mail in both inboxes.
+4. Test with the ticket-alarm `set-alarm-state` line of piece A step 9 (`aa-cis-dev-rds-cpu-high`). Expected: the
+   alarm e-mail in both inboxes.
 5. Change the `ALERT_EMAIL_SECONDARY` row of the [secrets register](../../security/secrets-register.md) to **keep**.
 
 ## C. Business owner on the page topic
