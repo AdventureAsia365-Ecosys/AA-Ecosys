@@ -6,7 +6,8 @@ only — never a value.** The machine-readable twin is [`secrets-register.yaml`]
 (same rows); edit the YAML first, then the tables here to match (`python3 tools/security/secrets_register.py md
 --write` renders the [rotation schedule](#rotation) and the Rotation and Status cells).
 
-- Updated: 27/11/2026 (S296, AA-1183 part 1: register v2 with a rotation block per row; 57 rows added (7 Secrets
+- Updated: 28/11/2026 (S297, AA-1182: the RDS-managed master secret row, the old master DSN and its CI copy to
+  orphan-delete). Before: 27/11/2026 (S296, AA-1183 part 1: register v2 with a rotation block per row; 57 rows added (7 Secrets
   Manager, 15 GitHub, 4 vendor, 31 keys, certificates, domains and local credentials), 20 rows flipped to deleted, 6
   planned rows flipped to keep; the account ID left the page. Drift check against the live Secrets Manager list and
   the 27/11 GitHub listing: `diff = 0`). Earlier: 25/10/2026 (S250: acc2 `list-secrets` re-read, 53 names (49 live + 4 in the deletion window); new
@@ -50,6 +51,7 @@ only — never a value.** The machine-readable twin is [`secrets-register.yaml`]
 | | Count |
 |---|---|
 | Rows | 198 (S296, 27/11/2026): 67 Secrets Manager (56 live: 54 keep, 2 open-item; 11 deleted), 64 GitHub (46 live: 45 keep, 1 open-item; 1 planned; 17 deleted/removed), 14 Vercel (all deleted), 4 Lambda env (all removed), 18 vendor (17 live, 1 orphan-delete), 31 keys, certificates, domains and local credentials (30 live, 1 orphan-delete). Rotation classes: see [Rotation](#rotation) |
+| Changed 28/11/2026 (S297, AA-1182) | RDS manages the master password of `aa-cis-dev-db` (180-day rotation): new **planned** row `rds!db-<id>` (exact name after the apply, then keep); `aa-cis/dev/rds` and its GitHub copy `TF_VAR_DB_PASSWORD` -> **orphan-delete** (only the DB Migrate fallback reads the old DSN; both deleted after the switch is verified). Pre-pilot key ceremony: [key ceremony runbook](../ops/runbooks/key-ceremony.md). |
 | Changed 27/11/2026 (S296, AA-1183 part 1) | Register v2: a rotation block per row (class, interval, owner role, hand-written `last_rotated`, `next_due`, `copy_of`), parser and checks in `tools/security/secrets_register.py`. Added: Secrets Manager `tripplanner/dev/tenant-assertion-key`, `crm/dev/e2e-test-crm/pilot-rehearsal-01-agent` / `-owner`, `crm/dev/e2e-test-studio/viewer`, three tenant `acp/*` secrets; GitHub `GOLDEN_GUARD_KEY` (CIS), seven AA-CIS-Infra names (identifiers, env `dev` and `dev-db-auto` `AWS_ROLE_ARN`), two AA-Partner env `e2e` names, a new AA-Ecosys section (four identifiers and the `ci-hygiene` copy of the CI bot key); Cognito client secrets, KMS keys, ACM certificates, the RDS server CA, IAM keys, domains, root users, local agent-machine credentials. Flipped to **deleted** (gone live): the 4 `aa-cis/dev/e2e-tenant/*` (deletion window), `aa-cis/dev/admin-secret-preview`, six Vercel-era GitHub secrets, AA-CIS-Infra env `prod` `AWS_ROLE_ARN`, the 8 variables of the deleted Vercel projects. **planned → keep**: `aa-cis/dev/admin-web`, `booking/dev/admin-web`, `crm/dev/e2e-test-crm/lt-agent`, `tripplanner/dev/tenant-assertion-key`, GitHub `BEDROCK_ACCT_PAYER_ID`, the three `E2EPORTAL*`. The RDS master `aa-cis/dev/rds` was rotated 27/11/2026 (S295); its GitHub copy `TF_VAR_DB_PASSWORD` still shows 07/07 in the S295 listing |
 | Drift check (S296, Secrets Manager + GitHub) | **`diff = 0`** against the live `list-secrets` (27/11, 60 names: 56 live + 4 in the deletion window) and the 27/11 GitHub listing per repo and environment (was 28 before this update: 21 unregistered names, 6 planned rows that exist, 1 store moved). Vercel: no project left; Lambda env not re-read |
 | Changed 25/11/2026 (S294, AA-948) | `crm/dev/web` gains one planned key, `mapbox_public_token`: the URL-restricted public Mapbox token (pk.) of the CRM proposal builder's map, written by AA-CIS-Infra `tools/identity/crm_dev_identity.py web-mapbox-token`, mapped into the CRM web task as `MAPBOX_PUBLIC_TOKEN` only while `crm_web_mapbox_enabled` is true (no new secret). Low sensitivity: it reaches the browser by design and only works from the agency host. Counts in the Rows line unchanged |
@@ -232,6 +234,8 @@ nothing to flag, but the rows were stale); the three TripPlanner Lambda `pending
 
 ## Who can read the RDS master (X1 S19)
 
+AA-1182 (S297): RDS manages the master password (secret `rds!db-<id>`, 180-day rotation); the table below describes `aa-cis/dev/rds` until it is deleted. DB Migrate reads the managed secret in the migrator task the same way (roles/ files, set-password, run-script only).
+
 Since 19/10/2026 (S243, Infra #203 + #204, AA-860; migrator rows updated for X1 S22, Infra #225, S244):
 
 | Principal | Reads `aa-cis/dev/rds`? | Why |
@@ -288,13 +292,15 @@ primary is stale. The schedule below is rendered from the YAML; edit the YAML, t
 
 <!-- rotation-schedule:begin (python3 tools/security/secrets_register.py md --write) -->
 
-Rows by class: scheduled 76, auto 18, on incident 26, identifier 30, retired 48. The table lists every row that is not an identifier or gone, soonest first; a copy row takes the interval and next due date of its primary.
+Rows by class: scheduled 74, auto 19, on incident 26, identifier 30, retired 50. The table lists every row that is not an identifier or gone, soonest first; a copy row takes the interval and next due date of its primary.
 
 | Name | Store | Class | Every | Owner role | Last rotated | Next due | Expires | Also on | Method |
 |---|---|---|---|---|---|---|---|---|---|
 | `legacy static key (acc1-legacy-default)` | `iam:acc1` | retired | — | — | — | 2026-11-27 | — | — | — |
 | `GitHub personal access tokens (pqnghiep1354)` | `vendor:github` | scheduled | 90 d | tech-lead | 2026-10-20 | 2026-11-27 | — | — | vendor-console |
 | `Vercel account tokens` | `vendor:vercel` | retired | — | — | — | 2026-11-27 | — | — | — |
+| `TF_VAR_DB_PASSWORD` | `github:AA-CIS-Infra` | retired | — | — | — | 2026-12-31 | — | — | — |
+| `aa-cis/dev/rds` | `secretsmanager:acc2` | retired | — | — | — | 2026-12-31 | — | — | — |
 | `api-cis-aa365.lumiguides.it.com` | `acm:us-west-1` | auto | — | aws | — | — | 2027-01-21 | — | aws |
 | `api-cis.lumiguides.it.com` | `acm:us-west-1` | auto | — | aws | — | — | 2027-01-22 | — | aws |
 | `human CLI access key (source of the admin profile)` | `iam:acc2` | scheduled | 90 d | tech-lead | 2026-11-17 | 2027-02-15 | — | staff-change, suspected-leak | manual |
@@ -318,8 +324,6 @@ Rows by class: scheduled 76, auto 18, on incident 26, identifier 30, retired 48.
 | `partner-auth.lumiguides.it.com` | `acm:us-east-1` | auto | — | aws | — | — | 2027-05-10 | — | aws |
 | `*.lumiguides.it.com` | `acm:us-east-1` | auto | — | aws | — | — | 2027-05-12 | — | aws |
 | `*.lumiguides.it.com` | `acm:us-west-1` | auto | — | aws | — | — | 2027-05-23 | — | aws |
-| `TF_VAR_DB_PASSWORD` | `github:AA-CIS-Infra` | copy of `aa-cis/dev/rds` | 180 d | tech-lead | 2026-11-27 | 2027-05-26 | — | key-ceremony, suspected-leak, staff-change | manual |
-| `aa-cis/dev/rds` | `secretsmanager:acc2` | scheduled | 180 d | tech-lead | 2026-11-27 | 2027-05-26 | — | key-ceremony, suspected-leak, staff-change | manual |
 | `server certificate rds-ca-rsa2048-g1` | `rds:aa-cis-dev-db` | auto | — | aws | — | — | 2027-07-07 | — | aws |
 | `tripplanner/dev/api-key` | `secretsmanager:acc2` | scheduled | 365 d | tech-lead | 2026-09-13 | 2027-09-13 | — | key-ceremony | manual |
 | `aa-cis/dev/typesafe` | `secretsmanager:acc2` | scheduled | 365 d | tech-lead | 2026-09-29 | 2027-09-29 | — | — | vendor-console |
@@ -402,6 +406,7 @@ Rows by class: scheduled 76, auto 18, on incident 26, identifier 30, retired 48.
 | `acp/social/41ea21ee-77ee-5474-bd6d-aa738d2da990` | `secretsmanager:acc2` | on incident | — | tenant | 2026-11-13 | — | — | offboarding, suspected-leak | app |
 | `booking/dev/sentry-dsn` | `secretsmanager:acc2` | on incident | — | tech-lead | 2026-10-22 | — | — | abuse | vendor-console |
 | `crm/dev/sentry-dsn` | `secretsmanager:acc2` | on incident | — | tech-lead | 2026-10-23 | — | — | abuse | vendor-console |
+| `rds!db-<id> (master user secret of aa-cis-dev-db)` | `secretsmanager:acc2` | auto | 180 d | aws | — | — | — | key-ceremony, suspected-leak, staff-change | aws |
 | `tripplanner/dev/sentry-dsn` | `secretsmanager:acc2` | on incident | — | tech-lead | 2026-10-22 | — | — | abuse | vendor-console |
 | `Anthropic console (API key owner)` | `vendor:anthropic` | on incident | — | business-owner | unknown | — | — | staff-change, suspected-leak | vendor-console |
 | `root users of acc1, acc2, acc3 and acc4 (password and MFA)` | `vendor:aws-root` | on incident | — | tech-lead | unknown | — | — | staff-change, suspected-leak | vendor-console |
@@ -419,11 +424,12 @@ Rows by class: scheduled 76, auto 18, on incident 26, identifier 30, retired 48.
 
 ## Register
 
-### Secrets Manager, acc2 (us-west-1) (67)
+### Secrets Manager, acc2 (us-west-1) (68)
 
 | Name | Owner app | Consumers (main) | Managed by | Rotation | Last changed | Status | Notes |
 |---|---|---|---|---|---|---|---|
-| `aa-cis/dev/rds` | cis | migrator task, read in the task as MASTER_DSN_ID for roles/ files, set-password, run-script only, incl. the nightly DB Tour Liveness Gate run-script (AA-986) (AA-CIS-Infra db/run_migration.py:204; not injected since X1 S22, Infra #225); AA-CIS-App scripts/link_staff_identity.py:65, services/acp_produce/sweeper_lambda.py:37 (default; Lambda not deployed); humans with the MFA admin profile (break-glass, DM-8.9) | cli (read by data source module.secrets.data.aws_secretsmanager_secret.rds) | scheduled 180 d | 2026-07-07 | **keep** | Master DSN (aa_cis_admin). No longer the CIS runtime login since X1 S18 (19/10/2026); the CIS task role is denied it since X1 S19; DB Migrate logs in as db_migrator since X1 S22. Also readable by the CI apply role aa-cis-infra-tf-apply (SecretsManagerReadWrite; open item 10). See "Who can read the RDS master (X1 S19)". |
+| `aa-cis/dev/rds` | cis | migrator task, legacy fallback only since AA-1182 (S297): the runner reads the RDS-managed master secret first, this DSN only when that one is unavailable (AA-CIS-Infra db/run_migration.py MASTER_DSN_ID); dead readers AA-CIS-App scripts/link_staff_identity.py:65, services/acp_produce/sweeper_lambda.py:37 | cli (no Terraform reference since AA-1182) | retired | 2026-11-27 | **orphan-delete** | Master DSN (aa_cis_admin), hand-kept until AA-1182. RDS manages the master password since the S297 apply, which made this DSN's password invalid; delete it after the switch is verified, then flip to deleted. See "Who can read the RDS master (X1 S19)". |
+| `rds!db-<id> (master user secret of aa-cis-dev-db)` | infra | migrator task, db/run_migration.py MASTER_MANAGED_ID via DescribeDBInstances, for roles/ files, set-password and run-script only; humans with the MFA admin profile (break-glass) | terraform module.rds (manage_master_user_password, aws_secretsmanager_secret_rotation.master; RDS owns the secret) | auto (AWS) | — | **planned** | AA-1182 (S297): JSON {username, password}. The exact name exists only after the apply: replace the placeholder and flip to keep. |
 | `aa-ecosys/ops/linear-api-key` | ecosystem | AA-Ecosys `tools/linear/linear_export.py` (orchestrating session, MFA admin profile) | cli (by hand, the tech lead) | scheduled 365 d | 2026-10-20 | **keep** | Linear personal API key (S245): export closed issues to `docs/linear-export/`, then archive via the GraphQL API (Free plan, no manual archive in the UI). Created 20/10/2026 (S245). |
 | `aa-cis/dev/dataforseo` | cis | ECS api + worker DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD (modules/ecs/main.tf:509-510, :708-709) | cli (data source module.secrets.data.aws_secretsmanager_secret.dataforseo) | scheduled 365 d | 2026-10-25 | **keep** | Vendor DataForSEO login/password (JSON). Rotated S251 (25/10/2026) by the tech lead (vendor dashboard) and written here by the agent; LastChangedDate re-read S261. |
 | `aa-cis/dev/acp-partner-api` | cis | — | terraform module.secrets.aws_secretsmanager_secret.acp_partner_api (forgotten by AA-878 I2, removed block) | retired | 2026-10-15 | **deleted** | Placeholder of the retired ACP v1 partner path. No reader on main of any repo; CloudTrail since 18/10: only the plan role (refresh). LastChangedDate 15/10 is a Terraform tag re-apply, not a value change. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
@@ -528,7 +534,7 @@ Rows by class: scheduled 76, auto 18, on incident 26, identifier 30, retired 48.
 | `MGMT_ORG_ID` | `github:AA-CIS-Infra` | infra | terraform-plan.yml, terraform-apply.yml, terraform-drift.yml (`TF_VAR_org_management_org_id` of the aa365 plans) | identifier | **keep** | AA-1004 (S273): ID of the AA organization, the `aws:PrincipalOrgID` condition of the nonprod account's `OrganizationAccountAccessRole`. Not a secret value. Set 08/11/2026 before the Infra branch that reads it was pushed (GitHub passes a missing secret as an empty string), one line: `aws organizations describe-organization --profile aa-mgmt --query Organization.Id --output text \| gh secret set MGMT_ORG_ID -R AdventureAsia365-Ecosys/AA-CIS-Infra`. Required once `accounts/aa365` sets `org_access_role_enabled = true` (the variable validation rejects an empty value then). |
 | `BEDROCK_ACCT_PAYER_ID` | `github:AA-CIS-Infra` | infra | terraform-plan.yml, terraform-apply.yml, terraform-drift.yml (`TF_VAR_bedrock_acct_payer_id` of the aa365 plans: the acc1 assume grant of the CIS task role and the task env `BEDROCK_ACCT_PAYER`) | identifier | **keep** | AA-1095 (S278): acc1's account ID (Bedrock chat serving while acc3 is blocked, ADR 0001a Note S278). Not a secret value; a secret so the public Infra repo and its run logs hold no ID of a personal account. Unset (an empty string in CI): the aa365 plan leaves the acc1 statement out and the env empty. Set it before the Infra branch's plan, one line: `aws sts get-caller-identity --profile pqnghiep-admin --query Account --output text \| gh secret set BEDROCK_ACCT_PAYER_ID -R AdventureAsia365-Ecosys/AA-CIS-Infra`; **keep** once set. |
 | `ALERT_EMAIL_SECONDARY` | `github:AA-CIS-Infra` | infra | terraform-plan.yml, terraform-apply.yml, terraform-drift.yml (`TF_VAR_alert_email_secondary` of the aa365 plans: the second e-mail subscription of the alerts topic, `accounts/aa365/observability.tf`) | identifier | **planned** | AA-1110 (S283): the second alert recipient's inbox (a role address of the second key-holder). Not a credential; a secret so the public Infra repo and its run logs never publish the inbox that receives every alarm (spam / phishing target). Repo level, not an environment: the PR plan and drift jobs run without one. Unset (an empty string in CI): no second subscription. Set it when the tech lead names the inbox (`gh secret set ALERT_EMAIL_SECONDARY -R AdventureAsia365-Ecosys/AA-CIS-Infra`, value on stdin), then dispatch Terraform Apply (aa365); **keep** once set. Never in `terraform.tfvars` (the Infra test `test_aa1110_second_alert_channel.py` fails). |
-| `TF_VAR_DB_PASSWORD` | `github:AA-CIS-Infra` | infra | terraform-apply.yml:29; terraform-plan.yml:50 | copy of `aa-cis/dev/rds` | **open-item** | RDS master password, repo-level (S241 E12: move into a protected env or drop once RDS manages it). S240: printed once in a local transcript; decision: rotate before prod. |
+| `TF_VAR_DB_PASSWORD` | `github:AA-CIS-Infra` | infra | none since AA-1182 (S297): no workflow reads it | retired | **orphan-delete** | Former CI copy of the RDS master password; superseded by the RDS-managed master secret. Delete after the AA-CIS-Infra merge, then flip to deleted. |
 | `AA_CI_BOT_PRIVATE_KEY` | `github:AA-CIS-App/release` | ecosystem | not yet on main (release-please AA-891; Infra docs workflows); `kit-sync.yml` sync job (AA-994 S3s: token narrowed to one consumer app repo, Contents + Pull requests write) | copy of `GitHub App aa-ecosys-ci-bot` | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |
 | `AA_CI_BOT_PRIVATE_KEY` | `github:AA-Booking/release` | ecosystem | not yet on main (release-please AA-891; Infra docs workflows) | copy of `GitHub App aa-ecosys-ci-bot` | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |
 | `AA_CI_BOT_PRIVATE_KEY` | `github:AA-TripPlanner-Web/release` | ecosystem | not yet on main (release-please AA-891; Infra docs workflows) | copy of `GitHub App aa-ecosys-ci-bot` | **keep** | AA-901. Key of the GitHub App `aa-ecosys-ci-bot` (app id 5421877, variable `AA_CI_BOT_APP_ID`). |

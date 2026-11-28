@@ -67,6 +67,7 @@ Everything runs on **acc2** (us-west-1) except the Bedrock LLM calls, which run 
 | [Onboard a pilot agency (provision, owner, brand, add-ons, AI budget, pilot mode, exit)](runbooks/pilot-agency-onboarding.md) | draft, UNTESTED | - (AA-1086) |
 | [Rehearse a pilot with a synthetic agency (13 steps across every app)](runbooks/pilot-rehearsal.md) | draft, UNTESTED | - (AA-1086) |
 | [Rotate a secret](runbooks/secret-rotation.md) | draft, UNTESTED | two classes once |
+| [Run the pre-pilot key ceremony (nine key groups, dated record)](runbooks/key-ceremony.md) | draft, UNTESTED | - (AA-1182) |
 | [Switch off the legacy staff password login](runbooks/legacy-login-flag.md) | draft, UNTESTED | readiness read only |
 | [Use a break-glass path](runbooks/break-glass.md) | draft, UNTESTED | API path 2026-10-18 |
 | [Handle an SES bounce or complaint alarm](runbooks/ses-bounce.md) | draft, UNTESTED | read-only only |
