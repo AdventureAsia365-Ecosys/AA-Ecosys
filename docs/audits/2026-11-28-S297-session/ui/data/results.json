@@ -1,0 +1,749 @@
+[
+ {
+  "id": "01-cis-compliance-calendar",
+  "variant": "1440-light",
+  "url": "/admin/platform/compliance?tab=calendar",
+  "final_path": "/admin/platform/compliance",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 5,
+   "e2e_word": 1,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "check_state": "fail",
+   "oc010": "overdue",
+   "oc999": "overdue",
+   "tiles": [
+    [
+     "Overdue",
+     true
+    ],
+    [
+     "Due soon",
+     true
+    ],
+    [
+     "Open",
+     true
+    ],
+    [
+     "Lines",
+     true
+    ]
+   ],
+   "rows": 15,
+   "drill_badge": 2
+  },
+  "file": "01-cis-compliance-calendar-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "01-cis-compliance-calendar",
+  "variant": "390-dark",
+  "url": "/admin/platform/compliance?tab=calendar",
+  "final_path": "/admin/platform/compliance",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 5,
+   "e2e_word": 0,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "check_state": "fail",
+   "oc010": "overdue",
+   "oc999": "overdue",
+   "tiles": [
+    [
+     "Overdue",
+     true
+    ],
+    [
+     "Due soon",
+     true
+    ],
+    [
+     "Open",
+     true
+    ],
+    [
+     "Lines",
+     true
+    ]
+   ],
+   "rows": 0,
+   "drill_badge": 2
+  },
+  "file": "01-cis-compliance-calendar-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "02a-cis-plans",
+  "variant": "1440-light",
+  "url": "/admin/tenants/plans",
+  "final_path": "/admin/tenants/plans",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 1,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "02a-cis-plans-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "02a-cis-plans",
+  "variant": "390-dark",
+  "url": "/admin/tenants/plans",
+  "final_path": "/admin/tenants/plans",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 0,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "02a-cis-plans-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "02b-cis-plan-drawer",
+  "variant": "1440-light",
+  "url": "/admin/tenants/plans",
+  "final_path": "/admin/tenants/plans",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 1,
+   "e2e_word": 1,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "dialog_text_has_vnd": false,
+   "dialog_title": "Plan content.growth"
+  },
+  "file": "02b-cis-plan-drawer-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "02b-cis-plan-drawer",
+  "variant": "390-dark",
+  "url": "/admin/tenants/plans",
+  "final_path": "/admin/tenants/plans",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 1,
+   "e2e_word": 0,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "dialog_text_has_vnd": false,
+   "dialog_title": "Plan content.starter"
+  },
+  "file": "02b-cis-plan-drawer-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "02c-cis-tenant360-subscription",
+  "variant": "1440-light",
+  "url": "/admin/tenants/<uuid>?tab=subscription",
+  "final_path": "/admin/tenants/<uuid>",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [
+    "<issue-id>",
+    "<issue-id>"
+   ],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 1,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "02c-cis-tenant360-subscription-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "02c-cis-tenant360-subscription",
+  "variant": "390-dark",
+  "url": "/admin/tenants/<uuid>?tab=subscription",
+  "final_path": "/admin/tenants/<uuid>",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [
+    "<issue-id>",
+    "<issue-id>"
+   ],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 0,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "02c-cis-tenant360-subscription-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "02d-cis-tenant360-billing",
+  "variant": "1440-light",
+  "url": "/admin/tenants/<uuid>?tab=billing",
+  "final_path": "/admin/tenants/<uuid>",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 1,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "02d-cis-tenant360-billing-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "02e-cis-settings-enabled-currencies",
+  "variant": "1440-light",
+  "url": "/admin/platform/settings?app=cis&area=billing&key=cis.billing.enabled_currencies",
+  "final_path": "/admin/platform/settings",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 1,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "row_text": "Enabled currencies Which currencies agencies and staff see and can use for plans, billing terms, quotes, SaaS invoices and CRM proposals. USD is always on. cis.billing.enabled_currencies HIGH IMPACT Explain BILLING [\"USD\"] default [\"USD\"] — Never changed Change History"
+  },
+  "file": "02e-cis-settings-enabled-currencies-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "02e-cis-settings-enabled-currencies",
+  "variant": "390-dark",
+  "url": "/admin/platform/settings?app=cis&area=billing&key=cis.billing.enabled_currencies",
+  "final_path": "/admin/platform/settings",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 0,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "row_text": ""
+  },
+  "file": "02e-cis-settings-enabled-currencies-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "03a-booking-settings",
+  "variant": "1440-light",
+  "url": "/settings",
+  "final_path": "/settings",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [
+    "<email>"
+   ],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 4,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "03a-booking-settings-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "03a-booking-settings",
+  "variant": "390-dark",
+  "url": "/settings",
+  "final_path": "/settings",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [
+    "<email>"
+   ],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 3,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "03a-booking-settings-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "03b-booking-billing-terms",
+  "variant": "1440-light",
+  "url": "/agency-billing?tab=settings",
+  "final_path": "/agency-billing",
+  "scan": {
+   "vnd": [
+    "VND",
+    "VND",
+    "VND"
+   ],
+   "issue_ids": [
+    "<issue-id>"
+   ],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 1,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "software_fee_currency_field": 0
+  },
+  "file": "03b-booking-billing-terms-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "03b-booking-billing-terms",
+  "variant": "390-dark",
+  "url": "/agency-billing?tab=settings",
+  "final_path": "/agency-billing",
+  "scan": {
+   "vnd": [
+    "VND",
+    "VND",
+    "VND"
+   ],
+   "issue_ids": [
+    "<issue-id>"
+   ],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 0,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "software_fee_currency_field": 0
+  },
+  "file": "03b-booking-billing-terms-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "03c-booking-saas-invoices",
+  "variant": "1440-light",
+  "url": "/agency-billing?tab=invoices&kind=saas",
+  "final_path": "/agency-billing",
+  "scan": {
+   "vnd": [
+    "VND",
+    "VND",
+    "VND"
+   ],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 2,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "rows": 8
+  },
+  "file": "03c-booking-saas-invoices-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "03c-booking-saas-invoices",
+  "variant": "390-dark",
+  "url": "/agency-billing?tab=invoices&kind=saas",
+  "final_path": "/agency-billing",
+  "scan": {
+   "vnd": [
+    "VND",
+    "VND",
+    "VND"
+   ],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 1,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "rows": 0
+  },
+  "file": "03c-booking-saas-invoices-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "04a-crm-studio-billing",
+  "variant": "1440-light",
+  "url": "/portal/account/billing",
+  "final_path": "/portal/account/billing",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [
+    "<email>"
+   ],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 0,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "04a-crm-studio-billing-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "04a-crm-studio-billing",
+  "variant": "390-dark",
+  "url": "/portal/account/billing",
+  "final_path": "/portal/account/billing",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [
+    "<email>"
+   ],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 0,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "04a-crm-studio-billing-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "04b-crm-studio-dashboard",
+  "variant": "1440-light",
+  "url": "/portal/dashboard",
+  "final_path": "/portal/dashboard",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 0,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "04b-crm-studio-dashboard-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "04b-crm-studio-dashboard",
+  "variant": "390-dark",
+  "url": "/portal/dashboard",
+  "final_path": "/portal/dashboard",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 0,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "04b-crm-studio-dashboard-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "04c-crm-home-dashboard",
+  "variant": "1440-light",
+  "url": "/home",
+  "final_path": "/home",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 0,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "04c-crm-home-dashboard-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "04c-crm-home-dashboard",
+  "variant": "390-dark",
+  "url": "/home",
+  "final_path": "/home",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 0,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "file": "04c-crm-home-dashboard-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "04d-crm-proposal",
+  "variant": "1440-light",
+  "url": "/pipeline/<uuid>/proposal/<uuid>",
+  "final_path": "/pipeline/<uuid>/proposal/<uuid>",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 5,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "selects": [],
+   "currency_labels": 0
+  },
+  "file": "04d-crm-proposal-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "04d-crm-proposal",
+  "variant": "390-dark",
+  "url": "/pipeline/<uuid>/proposal/<uuid>",
+  "final_path": "/pipeline/<uuid>/proposal/<uuid>",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 0,
+   "e2e_word": 5,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "selects": [],
+   "currency_labels": 0
+  },
+  "file": "04d-crm-proposal-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "04e-crm-trip-proposals",
+  "variant": "1440-light",
+  "url": "/pipeline/<uuid>",
+  "final_path": "/pipeline/<uuid>",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 4,
+   "e2e_word": 5,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "selects": [],
+   "currency_labels": 0
+  },
+  "file": "04e-crm-trip-proposals-1440-light.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ },
+ {
+  "id": "04e-crm-trip-proposals",
+  "variant": "390-dark",
+  "url": "/pipeline/<uuid>",
+  "final_path": "/pipeline/<uuid>",
+  "scan": {
+   "vnd": [],
+   "issue_ids": [],
+   "emails": [],
+   "acct12": [],
+   "agent_word": 4,
+   "e2e_word": 5,
+   "overflow_doc": false,
+   "overflow_main": false
+  },
+  "extra": {
+   "selects": [],
+   "currency_labels": 0
+  },
+  "file": "04e-crm-trip-proposals-390-dark.png",
+  "console_errors": [],
+  "failing_requests": [],
+  "blocked_writes": [
+   "POST <sentry>/envelope/"
+  ],
+  "console_err_failed_from_blocked": 1
+ }
+]

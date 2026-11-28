@@ -1,8 +1,8 @@
 {
- "updated": "2026-11-27",
- "synced_at": "2026-11-27T14:02Z",
- "session": "S296",
- "next_session": "S297",
+ "updated": "2026-11-28",
+ "synced_at": "2026-11-28T09:46Z",
+ "session": "S297",
+ "next_session": "S298",
  "source": "Linear (27/11/2026, đọc trực tiếp, S295) + .tmp-session/S295/ops/plan.md + quyết định tech lead S295 (39/39, trang Tư vấn S295) + docs/backlog/README.md",
  "projects": {
   "data": "Data Platform",
@@ -514,7 +514,7 @@
     },
     {
      "text": "Vai trò tuỳ chỉnh (AA-1155): Booking + CIS, contract view shared.v_staff_booking_grant (Q2 = A, bổ sung ADR 0006), seed 'Product, ops & accounting' gồm cả báo giá/đặt chỗ đại lý (Q3), không quyền duyệt; trang Roles & permissions đủ 4 app",
-     "done": false
+     "done": true
     },
     {
      "text": "View-as xuống dưới (AA-1157): CIS + Booking, chỉ đọc, có log, không đổi phiên đăng nhập",
@@ -2749,13 +2749,13 @@
   {
    "id": "AA-1182",
    "title": "[Security] Lock Terraform state, move the RDS master password to RDS-managed rotation, and run the pre-pilot key ceremony",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "Urgent",
    "project": "data",
    "milestone": "M-PILOT",
-   "session": "S297",
+   "session": "S298",
    "size": "M",
-   "next": "Pilot · S297: sửa tools/identity đọc secret từ response add (bài học S296) → RDS tự quản mật khẩu master (180 ngày) + runbook key ceremony; xoay origin-verify/site marker trong cửa sổ ceremony",
+   "next": "Pilot · S297: RDS tự quản mật khẩu master 180 ngày live, runbook key ceremony (root #1060); còn: hạn mức chi phía vendor LLM (console) + ngày ceremony trước dữ liệu pilot thật",
    "needs": "Tech lead: MFA cho apply + xoay; ngày ceremony = trước dữ liệu pilot thật (sec-Q1)"
   },
   {
@@ -2769,18 +2769,6 @@
    "size": "L",
    "next": "Content · S296: tech lead bật cis.content.publish_two_person (trước), rồi cis.settings.two_person_approval; người thứ hai thật publish tour tay SYNTHETIC → Done",
    "needs": "Tech lead + người thứ hai thật (chủ DN hoặc người content/ops)"
-  },
-  {
-   "id": "AA-1155",
-   "title": "[Booking + CIS] Custom staff roles: roles as data, one combined role per person",
-   "status": "Todo",
-   "priority": "High",
-   "project": "tpbk",
-   "milestone": "M-ROLES",
-   "session": "S296",
-   "size": "L",
-   "next": "Roles · S296: đối chiếu Done-when (token decode booking-custom, test thu hồi view, header giả trên route budget, trang Roles 4 app) rồi Done-with-scope; T12 tài khoản người ops chuyển sang bước tay của tech lead",
-   "needs": "Tech lead: tạo tài khoản staff cho người ops (T12)"
   },
   {
    "id": "AA-1166",
@@ -2797,13 +2785,13 @@
   {
    "id": "AA-1183",
    "title": "[Ops] Secrets register v2 with rotation dates and a weekly rotation and expiry check",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "High",
    "project": "data",
    "milestone": "M-PILOT",
-   "session": "S297",
+   "session": "S298",
    "size": "M",
-   "next": "Ops · S297 phần 2: rotation_check.py hằng tuần (chỉ metadata) + quyền đọc metadata cho role compliance-evidence + gom bản sao khoá CI bot",
+   "next": "Ops · S297: rotation_check hằng tuần live (168 dòng), key CI bot gom về env ci-bot 6 repo, sổ v2 cập nhật (root #1062); còn: rotation_check/register_check nhận tiền tố rds!db-, tech lead xoá key App cũ",
    "needs": ""
   },
   {
@@ -2813,9 +2801,9 @@
    "priority": "High",
    "project": "tpbk",
    "milestone": "M-PRICE",
-   "session": "S297",
+   "session": "S298",
    "size": "L",
-   "next": "Dữ liệu · S297 bước 2: importer gói NCC (Check rồi Import); S298 gói tour theo nước",
+   "next": "Dữ liệu · S297: importer gói NCC xong code (lane l3, chưa PR vì bk-077); S298: ship ngay sau bk-076 (AA-1061) + Check trên Dev, rồi gói tour",
    "needs": "Chủ DN: 30–50 tour pilot, 2–3 nước, NCC thật (gia-D8) — chặn nhập liệu, không chặn code"
   },
   {
@@ -2898,22 +2886,22 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "M-PILOT",
-   "session": "S297",
+   "session": "S298",
    "size": "M",
-   "next": "Pilot · còn: TXT DMARC report trên zone adventure.asia (tech lead), image scan xanh sau 02/12, quyết 4 câu NAT allow-list (design note Infra #1051); xong thì đóng",
+   "next": "Pilot · S297: vá NAT chạy được (swap 1 GB, 79 gói, 0 lỗi); còn: TXT DMARC report trên Cloudflare (tech lead), image scan sau 02/12, 4 câu NAT allow-list",
    "needs": "",
    "due": "2026-12-02"
   },
   {
    "id": "AA-1110",
    "title": "[Ops] Continuity pack: second key-holder, runbook-only deploy/rollback drill, security tabletop and a second alert channel",
-   "status": "Todo",
+   "status": "In Review",
    "priority": "Urgent",
    "project": "data",
    "milestone": "M-PILOT",
-   "session": "S297",
+   "session": "S298",
    "size": "M",
-   "next": "Pilot · S297: chủ DN là người trực thứ hai (gọi tech lead trong 30 phút, sec-Q16), kênh Slack/Teams miễn phí qua Q Developer, chủ DN đăng ký topic page, tabletop + drill chỉ theo runbook",
+   "next": "Pilot · S297: gói liên tục đã merge (drill runbook, tabletop, checklist người giữ khoá 2, kênh Slack tắt); còn: buổi tabletop ~1 giờ với chủ DN + drill do người chạy",
    "needs": "Chủ DN: có mặt ~1 giờ cho tabletop + đăng ký topic"
   },
   {
@@ -2932,13 +2920,13 @@
   {
    "id": "AA-1117",
    "title": "[Go-live] One dated go-live gate: checklist with CI guard and the proofs it needs (price coverage, Booking restore drill, load test, edge rate limits)",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "High",
    "project": "data",
    "milestone": "M-PILOT",
-   "session": "S297",
+   "session": "at go-live",
    "size": "L",
-   "next": "Pilot · S297: GL-06 (key ceremony) kéo về trước dữ liệu pilot; GL-09/11/12/15 đóng hoặc dời trước 15/12; SA-24/45/46 thành dòng ngày pilot; đóng khi có ngày go-live",
+   "next": "Pilot · S297: thêm ngày dữ liệu pilot (GL-19), GL-06 trước dữ liệu thật, GL-20..22; đóng khi chủ DN chốt 2 ngày",
    "needs": "Chủ DN: ngày go-live"
   },
   {
@@ -2956,13 +2944,13 @@
   {
    "id": "AA-1184",
    "title": "[Ops] One ops calendar — calendar.yaml, overdue lines red on Compliance readiness, .ics feed",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "High",
    "project": "data",
    "milestone": "M-PILOT",
-   "session": "S297",
+   "session": "S298",
    "size": "M",
-   "next": "Ops · S297: docs/ops/calendar.yaml (gom backlog §1, plan.json, ngày trong memory), check ops_calendar_overdue đỏ trên Compliance readiness, .ics; không dùng vendor nhắc/uptime ngoài (sec-Q17); trip-domain-test.click để hết hạn (N3)",
+   "next": "Ops · S297: lịch ops 61 dòng + tab Calendar + .ics live, check xanh sau sổ secret; còn: tech lead import .ics vào Google Calendar → Done",
    "needs": ""
   },
   {
@@ -3040,13 +3028,13 @@
   {
    "id": "AA-1054",
    "title": "[Identity] At go-live: remove every Dev-only E2E staff exception (A10, A10a, A10b + A10b-1..4, A10c, A10d, A10e + A10e-1) and the dormant Booking bridge code",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "High",
    "project": "tpbk",
    "milestone": "M-PILOT",
-   "session": "S298",
+   "session": "at go-live",
    "size": "M",
-   "next": "Pilot · S298: rào is_pilot dùng chung CIS/Booking + script tắt 11 danh tính E2E vào NGÀY PILOT (sec-Q11), không đợi go-live; nâng Low → High (S295)",
+   "next": "Pilot · S297: rào pilot (CIS 495–496) + script tắt 12 danh tính E2E sẵn, công tắc tắt; còn: bật vào ngày pilot (chủ DN)",
    "needs": "Trigger: ngày pilot (chủ DN)"
   },
   {
@@ -3194,18 +3182,6 @@
    "needs": ""
   },
   {
-   "id": "AA-1191",
-   "title": "[Billing] USD only — one \"Enabled currencies\" setting, hide VND across CIS, Booking and Partner",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "core",
-   "milestone": "M-PRICE",
-   "session": "S297",
-   "size": "M",
-   "next": "Tiền tệ · S297: cài đặt admin 'Enabled currencies' = USD, ẩn VND ở CIS/Booking/Partner, API từ chối VND, kiểm dữ liệu live (DRY RUN); giữ cột VND (quyết định 27/11)",
-   "needs": ""
-  },
-  {
    "id": "AA-1192",
    "title": "[Website] Commercial site slice 1 — one-page English site with a demo button, static on S3 + CloudFront",
    "status": "Backlog",
@@ -3216,18 +3192,6 @@
    "size": "M",
    "next": "Trang bán hàng · S298: Infra S3 + CloudFront (mẫu photos_cdn), repo AA-Website, 1 trang tiếng Anh, giá USD, nút demo = e-mail; noindex (com-1..9 duyệt 27/11)",
    "needs": "Review độc lập (IAM)"
-  },
-  {
-   "id": "AA-1193",
-   "title": "[Ops] Auto-rollback API deploys when the post-deploy smoke check fails — CIS, Booking, CRM api",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M-PILOT",
-   "session": "S297",
-   "size": "S",
-   "next": "WA · S297: dùng lại job rollback của web cho 3 API (CIS api+worker, Booking, CRM api); drill smoke đỏ trên nhánh thử (OPS06)",
-   "needs": "Review độc lập (CI/workflow)"
   },
   {
    "id": "AA-1194",

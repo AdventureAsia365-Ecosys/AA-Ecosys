@@ -91,7 +91,7 @@ async def _section(conn: Any, name: str, queries: dict[str, str]) -> dict[str, A
     try:
         async with conn.transaction():  # a savepoint: a refused read never aborts the other sections
             for key, sql in queries.items():
-                out[key] = _rows(await conn.fetch(sql, CURRENCY))
+                out[key] = _rows(await conn.fetch(sql, *((CURRENCY,) if "$1" in sql else ())))
     except Exception as exc:  # noqa: BLE001 — a login without access to this app's schema: report, go on
         return {"skipped": f"{type(exc).__name__} {getattr(exc, 'sqlstate', '')}".strip()}
     return out

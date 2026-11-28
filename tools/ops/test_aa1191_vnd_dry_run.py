@@ -10,6 +10,7 @@ import asyncio
 import contextlib
 import io
 import json
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -18,6 +19,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import aa1191_vnd_dry_run as d  # noqa: E402
 
 TENANTS = ["00000000-0000-4000-8000-000000000001", "00000000-0000-4000-8000-000000000002"]
+
+
+class InterfaceMismatch(Exception):
+    """Stands in for asyncpg's InterfaceError on an argument count mismatch."""
 
 
 class Denied(Exception):
@@ -57,6 +62,11 @@ class FakeConn:
 
     async def fetch(self, sql, *args):
         self.statements.append(sql)
+        # like asyncpg: the argument count must match the $n placeholders (S297: a parameter sent to a query with
+        # no $1 raised InterfaceError and the whole cis section read as "skipped")
+        wanted = len(set(re.findall(r"\$(\d+)", sql)))
+        if len(args) != wanted:
+            raise InterfaceMismatch(f"the server expects {wanted} argument(s), {len(args)} were passed")
         for prefix in self.deny:
             if prefix in sql:
                 raise Denied(f"permission denied for {prefix}")
