@@ -243,7 +243,8 @@ weekly (Monday 04:47 UTC) `pin_freshness.py --json` → `hygiene_issues.py sync 
   a read failed too.
 - Reads: `aa-ecosys-ci-bot` token minted with Actions + Contents + Pull requests read, else the App without Actions,
   else `GITHUB_TOKEN` (root caches only); the `needs-permission` issue names what to grant. The App key sits only in
-  the root environment `ci-hygiene` (deployment branches: master), never at repo level. Writes: `GITHUB_TOKEN`,
+  the root environment `ci-bot` (deployment branches: master; `ci-hygiene` before AA-1183), never at repo level.
+  Writes: `GITHUB_TOKEN`,
   `issues: write`, root repo only.
 - By hand (read-only): `python3 tools/github/ci_hygiene.py --json > .tmp-session/r.json && python3
   tools/github/hygiene_issues.py sync --kind hygiene --report .tmp-session/r.json` prints the plan the workflow would apply.
