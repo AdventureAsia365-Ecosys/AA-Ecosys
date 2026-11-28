@@ -25,6 +25,17 @@ The shared, parameterised procedure (and its helper `tools/ops/ecs_rollback.sh`,
 > The same procedure was drilled on CIS (S241, [rollback-cis](rollback-cis.md)); on Booking only the read-only
 > steps 1-3 were run (2026-10-19). Set `status: active` after the first real run.
 
+## Automatic rollback first (AA-1193)
+
+Deploy Dev (`deploy-dev.yml`) rolls `aa-booking-dev-api` back by itself when its post-deploy verify is red on `main`:
+job `rollback` re-runs the deploy job guard (task counts, then the OIDC deploy gate), moves the service to the revision
+it ran before the deploy, waits `services-stable`, checks that `/booking/health` answers the previous commit, then
+alerts the ops topic and keeps the `deploy-smoke-red` issue. Details, refusals and the drill:
+[roll back any ECS service](rollback-ecs.md), section "Automatic rollback after a red post-deploy check". The CRM API
+(AA-Partner `deploy-dev.yml`, `aa-crm-dev-api`, `/crm/health`) works the same way. Use this page by hand when the run
+says `not rolled back (held by the deploy gate: ...)` (once the deploy-blocking job is done), `not rolled back
+(refused: ...)` or `ROLLBACK FAILED`, or when the problem showed up after the verify passed.
+
 ## When to use
 
 - Trigger: a Booking deploy finished (rollout `COMPLETED`) but `/booking/*` routes misbehave, or

@@ -130,7 +130,11 @@ Drills and their evidence: [drill index](drills/README.md).
 
 The four web frontends (CIS admin, Booking admin, CRM web, TripPlanner web) roll back by themselves when their
 post-deploy verify or smoke is red, and open a `deploy-smoke-red` issue (AA-1119,
-[rollback-ecs](runbooks/rollback-ecs.md#automatic-rollback-after-a-red-post-deploy-check)).
+[rollback-ecs](runbooks/rollback-ecs.md#automatic-rollback-after-a-red-post-deploy-check)). Since AA-1193 the three
+APIs do too (CIS api + worker together, Booking API, CRM API): Deploy Dev re-asks the deploy gate, rolls back to the
+revision that ran before the deploy, checks the health URL answers the previous commit, alerts the ops topic with the
+failing checks and keeps the same issue. A held gate rolls nothing back (the alert says so; roll back by hand once
+idle). Drill: dispatch Deploy Dev with `drill_force_smoke_fail` when `main` is ahead of what Dev runs.
 
 Merge rules (DM-11.5, data standards v1.1): during the dev phase the orchestrating agent merges and verifies its own
 PRs, including infra and security (D-13); risky PRs get an agent review first. The human gate (Terraform, migrations,

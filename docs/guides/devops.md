@@ -138,7 +138,10 @@ The full pre-merge checklist and the live verify are in `skill/aa-ship/SKILL.md`
 in [`ops/runbooks/`](../ops/runbooks/), listed on the [operations index](../ops/README.md) (AA-892).
 The four web frontends (CIS admin, Booking admin, CRM web, TripPlanner web) roll back by themselves when their
 post-deploy verify or smoke is red, and open a `deploy-smoke-red` issue (AA-1119,
-[rollback-ecs](../ops/runbooks/rollback-ecs.md#automatic-rollback-after-a-red-post-deploy-check)). TripPlanner merges
+[rollback-ecs](../ops/runbooks/rollback-ecs.md#automatic-rollback-after-a-red-post-deploy-check)). Since AA-1193
+the three API deploys do too (CIS api + worker together, Booking API, CRM API): Deploy Dev re-asks the deploy gate,
+rolls back to the revision that ran before the deploy, checks `/health` answers the previous commit and alerts the ops
+topic with the failing checks; the dispatch input `drill_force_smoke_fail` runs the drill. TripPlanner merges
 through the GitHub merge queue like CIS, Booking and Partner once its ruleset is on (AA-1119).
 
 ## DB Migrate
