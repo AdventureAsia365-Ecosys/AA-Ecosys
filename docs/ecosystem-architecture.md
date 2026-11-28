@@ -478,6 +478,10 @@ roles (ADR 0018 decision 5); nothing crosses accounts on the CI path.
 | `aa-cis-dev-docs-sync` | `accounts/aa365/docs_reader.tf` | AA-Ecosys (root), `ref:refs/heads/master` | Root `Docs sync` (the `/admin/docs` bundle in the bronze bucket, `docs-reader/` only) |
 | `aa-cis-dev-compliance-evidence` | `accounts/aa365/compliance_evidence.tf` | AA-Ecosys (root) `ref:refs/heads/master` and AA-CIS-Infra `ref:refs/heads/main`, each pinned to one workflow file (`job_workflow_ref`) | Root `Compliance evidence` and Infra `Compliance AWS`: read-only account checks (SecurityAudit + ViewOnlyAccess) and write-once evidence in the Object Lock evidence bucket (`evidence/` only, AA-1173) |
 | `aa-cis-infra-db-auto-apply` | `accounts/aa365/cicd_db_auto_apply.tf` | AA-CIS-Infra, `environment:dev-db-auto` + `ref:refs/heads/main` | Migration Apply of expand files (ADR 0017 decision 6): the migrator task family only |
+
+The three API deploy roles (`aa-cis-dev-app-deploy`, `aa-booking-dev-app-deploy`, `aa-crm-dev-app-deploy`) also hold
+`sns:Publish` on the alerts topic (`accounts/aa365/cicd_deploy_alerts.tf`, AA-1193): their Deploy Dev alerts the ops
+topic after an automatic rollback on a red post-deploy verify.
 | `aa-crm-dev-scrub-corpus` | `accounts/aa365/crm_scrub.tf` | AA-Partner, `environment:scrub-corpus` | The CRM `Scrub corpus` workflow (ApplyGuardrail only) |
 | `aa-terraform-plan` | `accounts/management/cicd.tf` (management account) | AA-CIS-Infra, `pull_request` and `ref:refs/heads/main` | Plan and drift of the management root (read only) |
 | `aa-terraform-apply` | `accounts/management/cicd.tf` (management account) | AA-CIS-Infra, `environment:org` (the tech lead as required reviewer) | Apply of the management root (boundary `aa-terraform-apply-boundary`) |
