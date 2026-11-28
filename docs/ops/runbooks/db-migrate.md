@@ -51,7 +51,10 @@ workflow wins and this page gets fixed.
   end. Its log is stream `migrate/migrate/<task id>` in `/ecs/aa-cis-dev` and is printed in the job.
 - Login: `db_migrator` since X1 S22 (the RDS master before). Each file in an owner directory (`cis/`, `booking/`,
   `tripplanner/`, `crm/`) runs as the live owner of that directory's anchor schema (`db/owners.yaml`). `roles/`
-  files, `set-password` and `run-script` use the master DSN, which the task reads itself.
+  files, `set-password` and `run-script` use the RDS master, whose login the task reads itself: since AA-1182 the
+  RDS-managed master secret of `aa-cis-dev-db` (log line `master login: aa_cis_admin (in-task RDS-managed secret of
+  aa-cis-dev-db)`), with the old DSN secret `aa-cis/dev/rds` as a fallback until it is deleted. `set-password` roles:
+  `aa_app_user`, `booking`, `cis_app`, `crm_app`, `db_migrator`, `tripplanner`.
 - Every session: `lock_timeout 5s`, `statement_timeout 15min`, `application_name db-migrate`. Header directives:
   `-- migrate: no-transaction`, `lock_timeout=…`, `statement_timeout=…`, `destructive` (the workflow takes a
   manual RDS snapshot first, DM-9.2).
