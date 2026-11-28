@@ -15,14 +15,15 @@ name: CI hygiene
 #
 # Tokens: reads go through an aa-ecosys-ci-bot installation token minted with read-only Actions + Contents + Pull
 # requests (Actions caches of other repos need actions:read; ADR 0021 decision 4: cross-repo reads use the App). The
-# App key can write to the child repos, so it lives ONLY in the environment `ci-hygiene` (deployment branches: master
-# only), never at repo level: a workflow edited on another branch cannot read it (same pattern as the app repos'
-# `release` environment, docs/security/github-apps.md part 5). Environment secrets are not visible in workflow-level
-# env, so the "is the App configured" test is a step inside the job. The App is optional here: without the repo
-# variable AA_CI_BOT_APP_ID + the environment secret AA_CI_BOT_PRIVATE_KEY, or when the App lacks Actions read, the run
-# falls back to a narrower token and the "needs permission" issue names what the tech lead must grant. Issue writes
-# use this run's GITHUB_TOKEN (issues: write, this repo only).
-# Public repo: the issue text carries repo names, workflow paths, sizes and versions only. Cost: $0 (standard runner).
+# App key can write to the child repos, so it lives ONLY in the environment `ci-bot` (deployment branches: master
+# only, no required reviewers), never at repo level: a workflow edited on another branch cannot read it (one such
+# environment per repo since AA-1183, tools/security/ci_bot_key_consolidate.sh; it replaced `ci-hygiene` here).
+# Environment secrets are not visible in workflow-level env, so the "is the App configured" test is a step inside the
+# job. The App is optional here: without the repo variable AA_CI_BOT_APP_ID + the environment secret
+# AA_CI_BOT_PRIVATE_KEY, or when the App lacks Actions read, the run falls back to a narrower token and the "needs
+# permission" issue names what the tech lead must grant. Issue writes use this run's GITHUB_TOKEN (issues: write, this
+# repo only). Public repo: the issue text carries repo names, workflow paths, sizes and versions only. Cost: $0
+# (standard runner).
 on:
   schedule:
     - cron: "17 4 * * *"    # caches, daily 04:17 UTC
@@ -91,8 +92,8 @@ jobs:
         check: ${{ fromJSON(needs.plan.outputs.checks) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-    # Holds AA_CI_BOT_PRIVATE_KEY; deployment branches limited to master (tech lead sets the rule before the secret).
-    environment: ci-hygiene
+    # Holds AA_CI_BOT_PRIVATE_KEY; deployment branches limited to master (tools/security/ci_bot_key_consolidate.sh).
+    environment: ci-bot
     permissions:
       contents: read   # check out the tools
       issues: write    # open / update / close this repo's hygiene issues (GITHUB_TOKEN, this repo only)

@@ -417,6 +417,53 @@ Rows by class: scheduled 76, auto 18, on incident 26, identifier 30, retired 48.
 
 <!-- rotation-schedule:end -->
 
+### Weekly rotation check
+
+AA-1183 part 2: [`tools/security/rotation_check.py`](../../tools/security/rotation_check.py) runs every Monday in the
+root workflow [`secret-rotation.yml`](../../.github/workflows/secret-rotation.yml). It reads **metadata only** and never
+a secret value (a unit test fails if the tool names a call that returns one; every AWS call goes through an allowlist,
+and `rotation_check.py iam-actions` prints the IAM actions it needs):
+
+| Store | What it reads | Trusted as a rotation date? |
+|---|---|---|
+| Secrets Manager | names, rotation settings, creation date of the `AWSCURRENT` version | No: a host-only edit makes a new version. An `AWSCURRENT` older than `last_rotated` proves the recorded rotation never reached the store. |
+| GitHub Actions secrets (six repos, repo and environment level) | names and `updated_at` (aa-ecosys-ci-bot token, Secrets and Environments read) | Yes: `updated_at` moves only when the value is set. |
+| Cognito app clients | creation date of each client secret (`ListUserPoolClientSecrets`, which never returns the value) | Yes. |
+| ACM (every `acm:<region>` of the register) | expiry, renewal status, renewal eligibility | Expiry |
+| KMS | key state, automatic rotation on/off, next rotation date | AWS rotation |
+| IAM | creation date of the active access keys (no user name is printed) | Yes (the oldest active key) |
+| RDS | server certificate CA and expiry | Expiry |
+| Domains | the RDAP `expiration` event | Expiry |
+| Vendor consoles, Vercel, local agent-machine credentials | nothing live | the register dates only |
+
+Levels (windows and caps in [`tools/security/rotation_check.toml`](../../tools/security/rotation_check.toml), the seed
+for an admin settings page once one exists):
+
+- **RED**: overdue; last rotation `unknown`; missing from its store; a copy not updated after its primary rotated; the
+  register recording a rotation the store does not show; a retired credential past its revoke-by date; a certificate or
+  domain within 14 days of expiry (not renewed) or a failed ACM renewal; KMS automatic rotation off; a store the check
+  could not read.
+- **AMBER**: due within 30 days (14 days for the 90-day items), an expiry within 30 days, a revoke-by date near, names
+  in a store that have no register row.
+
+Each finding is one issue in this repo with the label `secret-rotation`, titled `Secret rotation: <store> <name>`:
+the next run edits it when the finding changes and closes it when the row is green. Fix the cause, then record the new
+`last_rotated` / `next_due` here in the same PR as any copy change. A manual run (`workflow_dispatch`) is a dry run
+unless `apply` is ticked. Every run also keeps `rotation-due.json` (every row's due date, for the ops calendar) as a
+14-day artifact. Local dry run, register dates and RDAP only:
+`python3 tools/security/rotation_check.py run --rdap --json-out /tmp/due.json`.
+
+### CI bot key
+
+The aa-ecosys-ci-bot App private key lives in ONE place per repo: the environment `ci-bot` (deployment branches: the
+default branch only, no required reviewers), secret `AA_CI_BOT_PRIVATE_KEY`; the App id is the repo variable
+`AA_CI_BOT_APP_ID` (an identifier, class `identifier`, not a secret). Every workflow job that mints a ci-bot token
+names `environment: ci-bot`. Until AA-1183 part 2 the copies sat in environment `release` (four app repos),
+`ci-hygiene` (root) and at repo level (AA-CIS-Infra, readable by a workflow on any branch).
+[`tools/security/ci_bot_key_consolidate.sh`](../../tools/security/ci_bot_key_consolidate.sh) does the move (`plan`,
+`setup --pem`, `cleanup`); its header lists the order. Rotating the key later is the same `setup` with the new key
+file, then deleting the old key in the App settings.
+
 ## Register
 
 ### Secrets Manager, acc2 (us-west-1) (67)
