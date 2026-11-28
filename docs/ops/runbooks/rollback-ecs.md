@@ -68,7 +68,8 @@ top:
   `override_running_jobs` reason if the dispatch gave one. A held gate rolls nothing back: the run, the alert and the
   issue say "held by the deploy gate"; roll back by hand with this page once the gate is clear.
 - Otherwise `.github/scripts/ecs_api_rollback.py rollback --apply` moves every service back, all or none (a refused
-  worker keeps the CIS api where it is: one image), waits `services-stable`, checks the running image, and then the
+  worker keeps the CIS api where it is: one image; CIS api and worker whose previous revisions are different builds
+  are refused too), waits `services-stable`, checks the running image, and then the
   public health URL (`/health`, `/booking/health`, `/crm/health`) must answer the previous commit in `git_sha`.
 - One message goes to the alerts SNS topic (the ops topic of every alarm): the app, the commit, the failing checks
   and the rollback outcome, subject `[aa-deploy] <app> Dev: post-deploy check red, rolled back` (or `not rolled

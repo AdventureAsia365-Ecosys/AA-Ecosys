@@ -32,6 +32,8 @@ the `deploy-smoke-red` issue. Details, refusals and the drill: [roll back any EC
 - the run says `not rolled back (held by the deploy gate: ...)`: wait for the wave or the deploy-blocking job, then
   follow the steps below (or use an override reason, tech lead only);
 - the run says `not rolled back (refused: ...)` or `ROLLBACK FAILED`, or the problem showed up after the verify passed.
+  One refusal is specific to CIS: `targets ran different builds before the deploy` (api and worker were already on two
+  images, for example after a failed worker roll). Pick one build for both by hand with the steps below.
 
 ## When to use
 
