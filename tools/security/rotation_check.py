@@ -29,8 +29,9 @@ Levels (windows and caps: tools/security/rotation_check.toml, never constants he
 
 Outputs: one GitHub issue per finding in the root repo, label `secret-rotation` (deduplicated by title, edited when the
 finding changes, closed when the row turns green in a run that READ its store: an issue whose store (or the whole
-AWS / GitHub side) could not be read stays open, because its finding may only have dropped out); a machine-readable JSON of every row's due date for the ops
-calendar (--json-out); a Markdown summary (--summary). Dry run by default: --apply writes issues.
+AWS / GitHub side) could not be read stays open, because its finding may only have dropped out); a machine-readable
+JSON of every row's due date for the ops calendar (--json-out); a Markdown summary (--summary). Dry run by default:
+--apply writes issues.
 
 Every AWS call goes through AwsCli, which refuses any operation outside AWS_CALLS; `iam-actions` prints the IAM
 actions those calls need (the compliance evidence role in AA-CIS-Infra grants exactly these). Anything printed or

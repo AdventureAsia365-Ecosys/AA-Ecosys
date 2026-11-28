@@ -55,6 +55,15 @@ the move of the aa-ecosys-ci-bot private key into one `ci-bot` environment per r
   `github:*` source) was attempted. Register-only stores (vercel, vendor, local, lambda-env, other accounts) close as
   before. An issue with no key marker is never closed (fails closed).
 
+- **The cleanup guard fails closed** (review fix, S297): the first `workflows_ready` was bash inside `if !`, where
+  errexit is off, and listed files with `for f in $(gh api ...)`, where a failed substitution never trips errexit;
+  so a rate limit or a 404 gave zero files and the guard passed, letting `cleanup --apply` delete the old key copies.
+  It is now `tools/security/ci_bot_workflows_ready.py`: an unreadable listing or file, an empty list, a file without
+  inline content or not valid YAML, a key reference outside a job, a reusable-workflow call passing the key, or a
+  job in another environment all mean "not ready" (exit 1). It is job-level like `test_ci_bot_environment.py`, so
+  one `environment: ci-bot` job no longer clears another job of the same file. A test runs the shell `cleanup
+  --apply` with a failing `gh` stub and asserts the guard itself refuses and nothing is deleted.
+
 ## Changed
 
 - Root: `tools/security/rotation_check.py`, `rotation_check.toml`, `test_rotation_check.py` (50 tests, in the Docs

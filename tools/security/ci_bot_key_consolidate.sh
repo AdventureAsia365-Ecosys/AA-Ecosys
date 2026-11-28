@@ -27,10 +27,12 @@
 # Commands (dry run unless --apply; every gh call is one line; the key is read from the file by gh, never echoed):
 #   plan                                   read-only: where each copy is now and what is missing
 #   setup --pem FILE [--apply] [--shred]   create/align the ci-bot environments, store the key, set the repo variable
-#   cleanup [--apply] [--delete-old-envs]  refuse while a default-branch workflow still reads the key outside
-#                                          ci-bot; otherwise delete the old copies (and the emptied old environments)
+#   cleanup [--apply] [--delete-old-envs]  refuse while a default-branch job still reads the key outside ci-bot, or
+#                                          while any workflow cannot be read (ci_bot_workflows_ready.py, fails
+#                                          closed); otherwise delete the old copies (and the emptied old environments)
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OWNER="AdventureAsia365-Ecosys"
 ENV_NAME="ci-bot"
 KEY_NAME="AA_CI_BOT_PRIVATE_KEY"
@@ -125,22 +127,14 @@ setup() {
   fi
 }
 
-# Every workflow on the default branch that names the key must run that job in environment ci-bot.
+# Every job on the default branch that reads the key must run in environment ci-bot. The check is Python and fails
+# CLOSED: an unreadable listing or file, an empty workflow list or an unparsable file means "not ready" (bash turns
+# errexit off inside a function called from `if`, and a failed `$(...)` in a for-list never trips it, so a shell
+# version of this guard silently passed on a failed gh call; S297 review).
 workflows_ready() {
-  local ok=true
-  for repo in "${REPOS[@]}"; do
-    br=$(branch_of "$repo")
-    for f in $(gh api "repos/$OWNER/$repo/contents/.github/workflows?ref=$br" --jq '.[] | select(.type=="file") | .path'); do
-      body=$(gh api "repos/$OWNER/$repo/contents/$f?ref=$br" --jq .content | base64 -d)
-      if grep -q "secrets\.$KEY_NAME" <<<"$body" && ! grep -q "environment: $ENV_NAME" <<<"$body"; then
-        echo "$repo: $f reads $KEY_NAME outside environment $ENV_NAME on $br" >&2; ok=false
-      fi
-      if grep -q "secrets\.$KEY_NAME" <<<"$body" && grep -Eq "environment: (release|ci-hygiene)$" <<<"$body"; then
-        echo "$repo: $f still names an old environment" >&2; ok=false
-      fi
-    done
-  done
-  [ "$ok" = true ]
+  local targets=()
+  for repo in "${REPOS[@]}"; do targets+=("$repo:$(branch_of "$repo")"); done
+  python3 "$SCRIPT_DIR/ci_bot_workflows_ready.py" --owner "$OWNER" --key "$KEY_NAME" --env "$ENV_NAME" "${targets[@]}"
 }
 
 cleanup() {

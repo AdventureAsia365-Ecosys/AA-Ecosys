@@ -200,8 +200,9 @@ aws secretsmanager delete-secret --secret-id aa-ecosys/github/aa-agent-app-key -
    ```
 
    Before AA-1183 the key sat in environment `release` (four app repos), `ci-hygiene` (root) and at repo level
-   (AA-CIS-Infra); `ci_bot_key_consolidate.sh cleanup --apply` deletes those copies once every workflow reads
-   `ci-bot` (it refuses earlier).
+   (AA-CIS-Infra); `ci_bot_key_consolidate.sh cleanup --apply` deletes those copies once every job that reads the
+   key runs in `ci-bot`. It refuses earlier, and also whenever a workflow list or file cannot be read
+   (`tools/security/ci_bot_workflows_ready.py` fails closed).
 5. Shred the `.pem` as in part 4 step 2.
 
 Verify (names only, no values):
