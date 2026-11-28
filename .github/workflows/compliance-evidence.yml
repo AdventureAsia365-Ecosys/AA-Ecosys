@@ -28,15 +28,27 @@ name: Compliance evidence
 # pull_request_target (tools/compliance/test_collect.py checks this file). On a pull request only the unit tests run
 # (no AWS, no reads).
 #
+# AA-1184 (S297): the collector also evaluates the ops calendar (docs/ops/calendar.yaml, tools/ops/ops_calendar.py) as
+# the check ops_calendar_overdue: red on CIS Compliance readiness the day a calendar line passes its due date. The
+# calendar's secrets register line needs PyYAML (pinned, like the other root workflows). A hand dispatch with
+# drill_overdue=true adds one deliberately past-due line for that run only (the detail says drill: true): the live proof
+# that the check turns red; the next run without it turns it green.
+#
 # Cost: under a minute of Actions a day on a public repo ($0); a few S3 PUT a day and a few kB.
 on:
   schedule:
     - cron: "41 2 * * *"   # daily 02:41 UTC; the CIS heartbeat window (cis.compliance.collector_heartbeat_hours) is longer
   workflow_dispatch:
+    inputs:
+      drill_overdue:
+        description: "Ops calendar drill: add one deliberately past-due line for this run (the check turns red)"
+        type: boolean
+        default: false
   pull_request:
     branches: [master]
     paths:
       - "tools/compliance/**"
+      - "tools/ops/ops_calendar.py"
       - ".github/workflows/compliance-evidence.yml"
 
 permissions:
@@ -58,6 +70,14 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Setup Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML (the ops calendar reads the secrets register)
+        run: python -m pip install --quiet pyyaml==6.0.2
+
       - name: Unit tests (invented GitHub answers and pages; no network)
         run: python3 -m unittest discover -s tools/compliance -p 'test_*.py'
 
@@ -77,12 +97,23 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Setup Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML (the ops calendar reads the secrets register)
+        run: python -m pip install --quiet pyyaml==6.0.2
+
       - name: Collect (counts only in this log)
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          DRILL_OVERDUE: ${{ github.event_name == 'workflow_dispatch' && inputs.drill_overdue == true }}
         run: |
           set -euo pipefail
-          python3 tools/compliance/collect.py --out "$OUT" > _counts.json
+          DRILL=()
+          if [ "$DRILL_OVERDUE" = "true" ]; then DRILL=(--drill-overdue); echo "ops calendar drill: on"; fi
+          python3 tools/compliance/collect.py --out "$OUT" "${DRILL[@]}" > _counts.json
           python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
           import json
           counts = json.load(open("_counts.json", encoding="utf-8"))

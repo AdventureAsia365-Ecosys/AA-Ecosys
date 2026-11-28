@@ -37,6 +37,12 @@ Everything runs on **acc2** (us-west-1) except the Bedrock LLM calls, which run 
 | SES bounce or complaint alarm | [SES bounce or complaint](runbooks/ses-bounce.md) |
 | An `[aa-sec] acm_expiry` e-mail (certificate not renewed, renewal failed or expired) | [ACM certificate expiry](runbooks/certificate-expiry.md) |
 
+## Calendar of dated duties
+
+- [Ops calendar](calendar.md): every dated and recurring ops duty (billing steps, reviews, credit expiries, law dates,
+  secret rotations from the register), red on CIS Compliance readiness the day one passes; phone feed
+  [`calendar.ics`](calendar.ics).
+
 ## Without the agent
 
 - [Run the platform without the agent](run-without-agent.md): deploy, roll back and apply a migration with the GitHub

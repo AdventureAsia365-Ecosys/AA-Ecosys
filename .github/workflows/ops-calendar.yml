@@ -1,0 +1,70 @@
+name: Ops calendar
+
+# AA-1184 (S297): the one ops calendar (docs/ops/calendar.yaml, page docs/ops/calendar.md, phone feed
+# docs/ops/calendar.ics). tools/ops/ops_calendar.py check validates every line (kind rules, ISO dates, owner roles,
+# warn_days on every line that can be overdue, no identifier or issue id in what people read), refuses a stale page
+# table or .ics feed, and evaluates the lines for today.
+#
+# On a pull request that changes the calendar, a register it reads its dates from, the tool or this file: overdue
+# lines are warnings only (a duty that passed elsewhere never blocks an unrelated edit). Every Monday and on a hand
+# dispatch: an overdue line fails the run, so the session-start guard list (tools/github/guard_runs.py) shows it red.
+# The daily compliance collector publishes the same evaluation to CIS (check ops_calendar_overdue), so GitHub cron is
+# never relied on more often than weekly here. Offline: no secret, no AWS; PyYAML for the secrets register only. Not a
+# required check. Cost: about 20 s of Actions a week on a public repo ($0).
+on:
+  schedule:
+    - cron: "29 2 * * 1"   # Monday 02:29 UTC (09:29 ICT), off the :00 mark and after the go-live gate run
+  workflow_dispatch:
+  pull_request:
+    branches: [master]
+    paths:
+      - "docs/ops/calendar.yaml"
+      - "docs/ops/calendar.md"
+      - "docs/ops/calendar.ics"
+      - "docs/ops/go-live/checklist.yaml"
+      - "docs/security/secrets-register.yaml"
+      - "docs/security/vuln-exceptions.toml"
+      - "tools/ops/ops_calendar.py"
+      - "tools/ops/test_ops_calendar.py"
+      - "tools/ops/golive_gate.py"
+      - "tools/security/secrets_register.py"
+      - ".github/workflows/ops-calendar.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ops-calendar-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  calendar:
+    name: Ops calendar check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML (the secrets register line)
+        run: python -m pip install --quiet pyyaml==6.0.2
+
+      - name: Unit tests (no network)
+        run: python -m unittest discover -s tools/ops -p 'test_ops_calendar.py'
+
+      - name: Check the calendar
+        env:
+          MODE: ${{ github.event_name == 'pull_request' && '--warn-overdue' || '' }}
+        run: |
+          set -euo pipefail
+          python tools/ops/ops_calendar.py check --summary "$GITHUB_STEP_SUMMARY" $MODE

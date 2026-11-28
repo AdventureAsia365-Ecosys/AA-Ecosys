@@ -1,0 +1,586 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//AA Ecosystem//Ops calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:AA ops calendar
+X-WR-TIMEZONE:UTC
+BEGIN:VEVENT
+UID:oc-001@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261130
+DTEND;VALUE=DATE:20261201
+SUMMARY:OC-001 Weekly database performance review (C4.3: top statements\, s
+ low log\, locks)
+DESCRIPTION:OC-001 (recurring) · owner: agent · source: AA-838 C4.3\, ski
+ ll aa-session step 6\nFirst session of each ISO week and after each wave\;
+  W49 decides the tenant-read target.\nEvidence: docs/audits/**/*c43-w*
+TRANSP:TRANSPARENT
+RRULE:FREQ=WEEKLY
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-001 Weekly database performance review (C4.3: top statements
+ \, slow log\, locks)
+TRIGGER:-P2D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-002@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261130
+DTEND;VALUE=DATE:20261201
+SUMMARY:OC-002 Merge the weekly release PRs of the four app repos
+DESCRIPTION:OC-002 (recurring) · owner: agent · source: tech lead S282 (r
+ elease-please kept\, 0 USD)\nCI green\, no wave or ECS exec running\; one 
+ ship_merge call for all\; confirm the deploy that follows.\nEvidence: none
+TRANSP:TRANSPARENT
+RRULE:FREQ=WEEKLY
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-003@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:OC-003 Monthly capacity and cost review (C8)
+DESCRIPTION:OC-003 (recurring) · owner: agent · source: AA-838 C8\, docs/
+ templates/capacity-review.md\nDecember: also re-read the trip planner fron
+ tend cost from the November bill.\nEvidence: docs/audits/*capacity-review*
+TRANSP:TRANSPARENT
+RRULE:FREQ=MONTHLY
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-003 Monthly capacity and cost review (C8)
+TRIGGER:-P3D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-004@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20270104
+DTEND;VALUE=DATE:20270105
+SUMMARY:OC-004 Quarterly access review\, co-signed by the business owner
+DESCRIPTION:OC-004 (recurring) · owner: tech lead · source: AA-838 DM-8.1
+ 0\, AA-1185 (IAM reports)\, setting cis.compliance.access_review_max_age_d
+ ays\nThe compliance check decides overdue from its admin age setting\; the
+  cadence feeds the phone reminder only.\nEvidence: check:last_access_revie
+ w
+TRANSP:TRANSPARENT
+RRULE:FREQ=MONTHLY;INTERVAL=3
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-005@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:OC-005 Monthly security posture review recorded on Compliance readi
+ ness > Reviews
+DESCRIPTION:OC-005 (recurring) · owner: tech lead · source: AA-1173 (cis.
+ compliance.review_max_age_days)\nEvidence: check:monthly_review_recent
+TRANSP:TRANSPARENT
+RRULE:FREQ=MONTHLY
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-006@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20270201
+DTEND;VALUE=DATE:20270202
+SUMMARY:OC-006 Restore drill passed and logged in the drill index
+DESCRIPTION:OC-006 (recurring) · owner: tech lead · source: AA-829\, docs
+ /ops/drills/README.md (cis.compliance.drill_max_age_days)\nThe compliance 
+ check turns red by itself when the newest passed drill is older than the s
+ etting.\nEvidence: check:last_restore_drill
+TRANSP:TRANSPARENT
+RRULE:FREQ=MONTHLY;INTERVAL=3
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-007@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261130
+DTEND;VALUE=DATE:20261201
+SUMMARY:OC-007 Weekly platform report for the business owner
+DESCRIPTION:OC-007 (recurring) · owner: agent · source: Jira PR-20 (weekl
+ y since S245)\; drafts approved by the tech lead first\nEvidence: none
+TRANSP:TRANSPARENT
+RRULE:FREQ=WEEKLY
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-008@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20271127
+DTEND;VALUE=DATE:20271128
+SUMMARY:OC-008 Yearly Well-Architected review (six pillars\, SaaS and gener
+ ative AI lenses)
+DESCRIPTION:OC-008 (recurring) · owner: tech lead · source: AA-1184 comme
+ nt S295\, report SEC-11\, WA Tool milestone 'S295 baseline 2026-11-27'\nBe
+ fore prod if prod comes earlier.\nEvidence: docs/audits/*well-architected*
+TRANSP:TRANSPARENT
+RRULE:FREQ=YEARLY
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-008 Yearly Well-Architected review (six pillars\, SaaS and g
+ enerative AI lenses)
+TRIGGER:-P30D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-020@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:OC-020 Billing transfer: the infrastructure account joins the compa
+ ny organization
+DESCRIPTION:OC-020 (deadline) · owner: tech lead · source: AA-1004\, S271
+  billing transfer timeline\nThe agent checks health\, ECS\, RDS and Cost E
+ xplorer in the management account right after.
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-020 Billing transfer: the infrastructure account joins the c
+ ompany organization
+TRIGGER:-P7D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-021@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261130
+DTEND;VALUE=DATE:20261201
+SUMMARY:OC-021 Reseller contract appendix for the billing transfer: send th
+ e six additions\, then sign
+DESCRIPTION:OC-021 (deadline) · owner: business owner · source: AA-1004\,
+  S295 vendor steps
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-021 Reseller contract appendix for the billing transfer: sen
+ d the six additions\, then sign
+TRIGGER:-P3D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-022@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261128
+DTEND;VALUE=DATE:20261129
+SUMMARY:(done) OC-022 Export the infrastructure account's cost history befo
+ re it leaves the reseller organization
+DESCRIPTION:OC-022 (deadline) · owner: agent · source: AA-1004\, S271 tim
+ eline (13 months by service and tag)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-023@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261130
+DTEND;VALUE=DATE:20261201
+SUMMARY:OC-023 Pull the November Cost Explorer figures as late as possible 
+ before the transfer
+DESCRIPTION:OC-023 (deadline) · owner: agent · source: AA-1004\, S295\nRe
+ corded as an estimate\; the final November number comes from the reseller 
+ invoice.
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-023 Pull the November Cost Explorer figures as late as possi
+ ble before the transfer
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-024@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261130
+DTEND;VALUE=DATE:20261201
+SUMMARY:OC-024 LLM serving account: root e-mail moved to the company mailbo
+ x\, company contact details
+DESCRIPTION:OC-024 (deadline) · owner: tech lead · source: S282 account o
+ wnership switch
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-024 LLM serving account: root e-mail moved to the company ma
+ ilbox\, company contact details
+TRIGGER:-P3D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-025@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:OC-025 Before and after the billing transfer: re-run the daily LLM 
+ probe and re-read the failure domains
+DESCRIPTION:OC-025 (deadline) · owner: agent · source: AI gateway plan J3
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-025 Before and after the billing transfer: re-run the daily 
+ LLM probe and re-read the failure domains
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-026@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:OC-026 AI gateway: set the direct OpenAI connection's monthly cap b
+ ack from 25 USD to 10 USD
+DESCRIPTION:OC-026 (deadline) · owner: agent · source: AA-1051 (raised fo
+ r November in S285)\nRead the value back on AI gateway > Budgets.
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-026 AI gateway: set the direct OpenAI connection's monthly c
+ ap back from 25 USD to 10 USD
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-027@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261202
+DTEND;VALUE=DATE:20261203
+SUMMARY:opens: OC-027 After the transfer: remove the reseller's admin role\
+ , add alternate contacts\, AI opt-out policy
+DESCRIPTION:OC-027 (deadline) · owner: agent · source: AA-1004\, S271 tim
+ eline and S295 (organization-wide access analyzer)\nFirst session on or af
+ ter 02/12\, never the transfer day itself.
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-028@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261202
+DTEND;VALUE=DATE:20261203
+SUMMARY:opens: OC-028 After the transfer: cost allocation tags\, budgets an
+ d anomaly monitors in the management account
+DESCRIPTION:OC-028 (deadline) · owner: agent · source: AA-1004\, AA-873
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-029@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261202
+DTEND;VALUE=DATE:20261203
+SUMMARY:opens: OC-029 LLM serving account: company payment card\, tax code\
+ , new root password and MFA held by the company
+DESCRIPTION:OC-029 (deadline) · owner: tech lead · source: S282 account o
+ wnership switch\nDecide then whether that account later joins the company 
+ organization.
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-030@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:opens: OC-030 Reconcile the cost ledger against the November provid
+ er invoices (difference at most 5 %)
+DESCRIPTION:OC-030 (deadline) · owner: agent · source: AA-1026 D6\, AA-80
+ 4
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-031@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:opens: OC-031 Read the November bill of the LLM serving account
+DESCRIPTION:OC-031 (deadline) · owner: agent · source: AA-998 (last Done-
+ when\; the account serves Bedrock again since S278)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-040@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261231
+DTEND;VALUE=DATE:20270101
+SUMMARY:OC-040 AWS Lift credits of the LLM serving organization expire (the
+ y never cover Claude on Bedrock)
+DESCRIPTION:OC-040 (deadline) · owner: tech lead · source: memory acc3 bu
+ dget note\, S277
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-040 AWS Lift credits of the LLM serving organization expire 
+ (they never cover Claude on Bedrock)
+TRIGGER:-P30D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-041@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261231
+DTEND;VALUE=DATE:20270101
+SUMMARY:OC-041 Kiro for Startups credit expires
+DESCRIPTION:OC-041 (deadline) · owner: tech lead · source: S295 near-date
+  list
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-041 Kiro for Startups credit expires
+TRIGGER:-P30D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-050@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261202
+DTEND;VALUE=DATE:20261203
+SUMMARY:OC-050 EU AI Act Art. 50(2): machine-readable AI marks on every pub
+ lished surface
+DESCRIPTION:OC-050 (deadline) · owner: tech lead · source: ADR 0019 d19\,
+  AA-1040 (date from secondary sources\, not checked against the official t
+ ext)\nMarks are live on every surface\; one live publish on a new WordPres
+ s test site is left.
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-050 EU AI Act Art. 50(2): machine-readable AI marks on every
+  published surface
+TRIGGER:-P7D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-051@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261222
+DTEND;VALUE=DATE:20261223
+SUMMARY:OC-051 Vietnam digital technology industry decree takes effect: cou
+ nsel confirms whether it adds AI duties
+DESCRIPTION:OC-051 (deadline) · owner: business owner · source: S295 AI a
+ nd security research notes (not verified)
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-051 Vietnam digital technology industry decree takes effect:
+  counsel confirms whether it adds AI duties
+TRIGGER:-P14D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-052@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20270301
+DTEND;VALUE=DATE:20270302
+SUMMARY:OC-052 Vietnam AI Law: systems running before 01/03/2026 must compl
+ y (transparency\, AI labels)
+DESCRIPTION:OC-052 (deadline) · owner: business owner · source: AI Law 13
+ 4/2025/QH15\, S295 research notes
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-052 Vietnam AI Law: systems running before 01/03/2026 must c
+ omply (transparency\, AI labels)
+TRIGGER:-P60D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-060@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261129
+DTEND;VALUE=DATE:20261130
+SUMMARY:OC-060 Trial security scans: export counts by severity\, confirm th
+ e four auto-offs ran\, bill is 0 USD
+DESCRIPTION:OC-060 (deadline) · owner: agent · source: AA-873 (S296 trial
+ )\, AA-1185 follow-up (ECR basic scan on push)
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-060 Trial security scans: export counts by severity\, confir
+ m the four auto-offs ran\, bill is 0 USD
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-061@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261129
+DTEND;VALUE=DATE:20261130
+SUMMARY:OC-061 Read and triage the first scheduled weekly Prowler scan
+DESCRIPTION:OC-061 (deadline) · owner: agent · source: AA-1173
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-061 Read and triage the first scheduled weekly Prowler scan
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-062@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261203
+DTEND;VALUE=DATE:20261204
+SUMMARY:OC-062 Read the first scheduled monthly ZAP scan and triage High fi
+ ndings
+DESCRIPTION:OC-062 (deadline) · owner: agent · source: AA-1111
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-062 Read the first scheduled monthly ZAP scan and triage Hig
+ h findings
+TRIGGER:-P2D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-065@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261202
+DTEND;VALUE=DATE:20261203
+SUMMARY:opens: OC-065 Decide blocking mode for the change guard after one w
+ arn week (uncovered code commits measured)
+DESCRIPTION:OC-065 (deadline) · owner: agent · source: AA-1136 (warn mode
+  since S292)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-070@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261128
+DTEND;VALUE=DATE:20261129
+SUMMARY:OC-070 First scheduled CRM end-to-end run on Dev is green\, no red-
+ run issue open
+DESCRIPTION:OC-070 (deadline) · owner: agent · source: AA-1196 (cron 03:1
+ 7 UTC)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-071@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261128
+DTEND;VALUE=DATE:20261129
+SUMMARY:opens: OC-071 Booking destructive migration chain: fresh dry run\, 
+ pins approved\, then the ordered PRs
+DESCRIPTION:OC-071 (deadline) · owner: agent · source: AA-1061 (bk-076\, 
+ not before 28/11 23:50 UTC)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-072@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261127
+DTEND;VALUE=DATE:20261128
+SUMMARY:opens: OC-072 Measure the savepoint statement rate after the savepo
+ int PRs (must fall to 0 per role)
+DESCRIPTION:OC-072 (deadline) · owner: agent · source: AA-838 (Booking an
+ d CIS savepoint PRs shipped S296)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-073@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261126
+DTEND;VALUE=DATE:20261127
+SUMMARY:opens: OC-073 Synthetic supplier bank account approved: confirm pay
+ outs lock for 24 h\, then clean up
+DESCRIPTION:OC-073 (deadline) · owner: agent · source: AA-1158 (business 
+ owner approval first)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-074@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:OC-074 Switch on automatic place research effective 01/12 (Platform
+  settings)
+DESCRIPTION:OC-074 (deadline) · owner: tech lead · source: AA-1122 (5 USD
+  month cap)
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-074 Switch on automatic place research effective 01/12 (Plat
+ form settings)
+TRIGGER:-P3D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-075@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261202
+DTEND;VALUE=DATE:20261203
+SUMMARY:opens: OC-075 First nightly automatic place research in December: n
+ ew or stale places only\, stops at the cap
+DESCRIPTION:OC-075 (deadline) · owner: agent · source: AA-1122
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-076@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261214
+DTEND;VALUE=DATE:20261215
+SUMMARY:opens: OC-076 Pilot rehearsal marker tenant: run its live erasure t
+ hrough the approved erasure flow
+DESCRIPTION:OC-076 (deadline) · owner: tech lead · source: AA-1086\, AA-1
+ 093 (CRM part not before 12/02/2027)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-077@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261115
+DTEND;VALUE=DATE:20261116
+SUMMARY:opens: OC-077 Re-request Bedrock quotas on the infrastructure accou
+ nt in small steps
+DESCRIPTION:OC-077 (deadline) · owner: tech lead · source: AA-862 follow-
+ up
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-078@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:opens: OC-078 Re-request batch inference on the fallback LLM accoun
+ t once it has some on-demand history
+DESCRIPTION:OC-078 (deadline) · owner: tech lead · source: S264 (AWS refu
+ sed for lack of history)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-081@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20270404
+DTEND;VALUE=DATE:20270405
+SUMMARY:OC-081 Dev test domain reaches its expiry (left to expire): no serv
+ ice may depend on it by then
+DESCRIPTION:OC-081 (deadline) · owner: tech lead · source: S295 near-date
+  list (the secrets register row carries the same expiry)
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-081 Dev test domain reaches its expiry (left to expire): no 
+ service may depend on it by then
+TRIGGER:-P60D
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-082@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261127
+DTEND;VALUE=DATE:20261128
+SUMMARY:opens: OC-082 Redirect the bare /admin path to the role's landing p
+ age instead of the sign-in page
+DESCRIPTION:OC-082 (deadline) · owner: agent · source: S290 follow-up (au
+ th code frozen until the business-owner demo of 26/11)
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+UID:oc-084@ops-calendar.aa-ecosys
+DTSTAMP:20261128T000000Z
+DTSTART;VALUE=DATE:20261204
+DTEND;VALUE=DATE:20261205
+SUMMARY:OC-084 Four retired test-tenant secrets leave their recovery window
+ : confirm gone\, register rows to deleted
+DESCRIPTION:OC-084 (deadline) · owner: agent · source: AA-1183 (scheduled
+  deletion of the e2e tenant secrets)
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:OC-084 Four retired test-tenant secrets leave their recovery wi
+ ndow: confirm gone\, register rows to deleted
+TRIGGER:-P2D
+END:VALARM
+END:VEVENT
+END:VCALENDAR
