@@ -397,7 +397,7 @@ class CommittedChecklistTest(unittest.TestCase):
         items = {it["id"]: it for it in gg.load_checklist()["items"]}
         for iid in ("GL-06", "GL-15", "GL-16"):
             self.assertEqual(items[iid].get("gate_date"), "pilot_data", iid)
-        self.assertIn("docs/ops/runbooks/key-ceremony.md", items["GL-06"]["refs"])
+        self.assertIn("docs/ops/runbooks/secret-rotation.md", items["GL-06"]["refs"])
 
 
 if __name__ == "__main__":

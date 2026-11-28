@@ -96,7 +96,6 @@ items:
     source: "ADR 0012 decision 11, gate item 6; moved before the pilot data date in S297"
     proof: []
     refs:
-      - docs/ops/runbooks/key-ceremony.md
       - docs/ops/runbooks/secret-rotation.md
       - docs/ops/runbooks/break-glass.md
     owner: tech lead
