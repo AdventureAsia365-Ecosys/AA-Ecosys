@@ -1,11 +1,14 @@
-# Go-live gate checklist (AA-1117, S294). Prod opens to real users only when every gate line below is met.
+# Go-live gate checklist (AA-1117, S294; two gate dates since S297). Prod opens to real users only when every gate
+# line below is met; the first real agency data lands in any app only when every line bound to the pilot data date is.
 #
 # Read by tools/ops/golive_gate.py (workflow .github/workflows/golive-gate.yml: on a PR that changes this file or the
 # tool, and weekly). Rendered into docs/ops/go-live/README.md with `python3 tools/ops/golive_gate.py render --write`.
 #
 # One line per gate item:
 #   id        GL-NN, stable (never renumber a line; retire one by leaving a note in its title)
-#   kind      gate (a condition) or date (the one go-live date line)
+#   kind      gate (a condition) or date (one line per gate date: the go-live date and the pilot data date)
+#   gate_date gate lines: the gate date the line must be met before, golive (the default) or pilot_data; a pilot_data
+#             line is needed before the go-live date too. Date lines: which gate date the line records.
 #   title     what must hold, in plain words
 #   source    where the item comes from (ADR, audit finding, decision)
 #   proof     repo paths (optionally #heading or #L<line>) or https URLs that PROVE the line is met; non-empty = met
@@ -13,15 +16,17 @@
 #   owner     a role: tech lead, business owner or engineer on duty (company docs name roles, not people)
 #   due       ISO date; required while the line has no proof; past due with no proof fails the guard
 #   due_note  when in the build the line falls, in words
-#   value     the go-live date line only: an ISO date, or null while it is not set (it then needs an owner)
+#   value     date lines only: an ISO date, or null while it is not set (it then needs an owner)
 #
-# Due dates are planning dates set on 2026-11-25 while no go-live date exists: the build items assume the date is set
-# in December (ADR 0012 decision 11: about three to four weeks of build before the date). When the business owner sets
-# the date, re-date every open line to fall on or before it; the guard refuses an open line due after the date.
+# Due dates are planning dates set on 2026-11-25 (re-dated 2026-11-28, S297) while neither gate date exists: the build
+# items assume the go-live date is set in December (ADR 0012 decision 11: about three to four weeks of build before the
+# date). When the business owner sets a gate date, re-date every open line bound to it to fall on or before it; the
+# guard refuses an open line due after a set gate date it is bound to, and a pilot data date after the go-live date.
+# Try dates first: python3 tools/ops/golive_gate.py check --golive YYYY-MM-DD --pilot-data YYYY-MM-DD
 # Subset of YAML only (see the tool's docstring): quote any value that contains ": " or starts with a symbol.
 
 version: 1
-updated: 2026-11-25
+updated: 2026-11-28
 
 items:
   - id: GL-01
@@ -86,15 +91,16 @@ items:
 
   - id: GL-06
     kind: gate
-    title: "Secrets rotated (D-02, D-03), and the break-glass PDF copy of the core runbooks in place"
-    source: "ADR 0012 decision 11, gate item 6"
+    gate_date: pilot_data
+    title: "Secrets rotated in the key ceremony before the first real pilot data (D-02, D-03), and the break-glass PDF copy of the core runbooks in place"
+    source: "ADR 0012 decision 11, gate item 6; moved before the pilot data date in S297"
     proof: []
     refs:
       - docs/ops/runbooks/secret-rotation.md
       - docs/ops/runbooks/break-glass.md
     owner: tech lead
-    due: 2027-01-15
-    due_note: go-live week
+    due: 2026-12-31
+    due_note: before the first real pilot data
 
   - id: GL-07
     kind: gate
@@ -122,14 +128,18 @@ items:
   - id: GL-09
     kind: gate
     title: "Price and photo coverage measured per pilot market; no pilot market sells with 0 priced tours"
+    gate_date: pilot_data
     source: "S282 audit R09 (one pilot market had 0 priced tours)"
     proof: []
     refs:
       - docs/audits/2026-11-13-S279-session/uat-rehearsal/README.md#set-up
       - docs/audits/2026-11-23-S288-session/live/e2e-owner/evidence-final.md
+      - docs/audits/2026-11-27-S296-session/jira-drafts.md
+      - docs/guides/business-owner-onboarding-and-pricing.md
     owner: tech lead
-    due: 2026-12-15
+    due: 2026-12-31
     due_note: before the pilot markets are named to agencies
+    note: "Re-dated in S297, no proof yet: on 2026-11-27 Dev had 2 of 844 tours priced (the CRM AA prices header) and no pilot market is named, so there is no per-market figure. Supplier prices are entered in Price setup (business owner guide); the tech lead measures per market."
 
   - id: GL-10
     kind: gate
@@ -152,8 +162,11 @@ items:
     refs:
       - docs/ops/runbooks/tenant-restore-drill.md
       - docs/audits/2026-11-13-S279-cis-restore-drill/restore-drill.json
+      - docs/ops/drills/README.md
     owner: tech lead
-    due: 2026-12-15
+    due: 2026-12-31
+    due_note: before the prod build
+    note: "Re-dated in S297, no proof yet: Booking has no per-partner export and restore job; the CIS and TripPlanner drills of GL-10 are the pattern to copy."
 
   - id: GL-12
     kind: gate
@@ -164,7 +177,9 @@ items:
       - docs/audits/2026-11-04-S268-crm-security-review/README.md#5-slos-and-load-test-the-other-half-of-crm-37a
       - docs/audits/2026-11-05-S269-aa969-loadtest/k6-summary.json
     owner: tech lead
-    due: 2026-12-15
+    due: 2026-12-31
+    due_note: before the prod build
+    note: "Re-dated in S297, no proof yet: only the CRM has a recorded load test (S269); no CIS or TripPlanner run is in the repo."
 
   - id: GL-13
     kind: gate
@@ -193,19 +208,23 @@ items:
 
   - id: GL-15
     kind: gate
-    title: "enforce_admins plan: branch rules apply to admins on every default branch, with the human-approval switch on from the first real data"
-    source: "S282 audit (enforce_admins false on the app repos); security decision D4 of S286"
+    gate_date: pilot_data
+    title: "enforce_admins plan carried out: the human-approval switch of the merge gate on, with the tech lead as approver, from the first real data"
+    source: "S282 audit (enforce_admins false on the app repos); security decision D4 of S286; S295 security review"
     proof: []
     refs:
       - tools/github/change_control.json
       - docs/security/baseline.md#identity-and-access
     owner: tech lead
-    due: 2026-12-15
+    due: 2026-12-31
+    due_note: on the pilot data date
+    note: "Re-dated in S297. The plan is decided and built (D4: the switch in change_control.json, off today, trigger written in the file); what is open is turning it on and naming the approver. The S294 wording also asked for branch rules on admins: in the S295 security review the tech lead declined a GitHub-side required review, so the client-side merge gate is the control."
 
   - id: GL-16
     kind: gate
+    gate_date: pilot_data
     title: "No real personal data in any app before the DPA is signed with that agency"
-    source: "S282 audit R10; ADR 0019 d16 pilot terms"
+    source: "S282 audit R10; ADR 0019 d16 pilot terms; tech lead decision of S295 (no money and no real data before counsel reviews the contracts)"
     proof: []
     refs:
       - docs/legal/dpa.md#15-pilot-terms-adr-0019-d16
@@ -225,8 +244,53 @@ items:
     due: 2027-01-15
     due_note: go-live week
 
+  - id: GL-20
+    kind: gate
+    gate_date: pilot_data
+    title: "Deletion and retention paths live for the pilot, or the business owner accepts in writing that they are not: the CRM lifecycle and audit-retention dry-run floors off (the admin switch stays the second gate), the CIS erasure apply step written as step 0 of the data-subject request runbook, and one traveller data-subject request drilled on synthetic data"
+    source: "S295 security review, data protection (the deletion switches are off on the pilot environment while the DPA describes crypto-shredding as live)"
+    proof: []
+    refs:
+      - docs/legal/dsar-erasure-runbook.md#3-erasure
+      - docs/legal/dsar-erasure-runbook.md#5-test-data-and-the-dev-drill
+      - docs/legal/dpa.md#15-pilot-terms-adr-0019-d16
+      - docs/audits/2026-11-27-S295-advisory/security-audit-public-summary.md#roadmap
+    owner: tech lead
+    due: 2026-12-31
+    due_note: before the first real pilot data
+
+  - id: GL-21
+    kind: gate
+    gate_date: pilot_data
+    title: "The agency-facing CRM web service runs one on-demand task as its base from the pilot day (about 5.5 USD a month); the TripPlanner web service follows when real travellers arrive; the two staff admins stay on Spot"
+    source: "S295 security review, resilience (the agency-facing web services run one Spot task with no on-demand fallback); tech lead decision of S295 (on-demand base on the pilot day); stability rule of S284"
+    proof: []
+    refs:
+      - docs/architecture/data-standards/03-scaling.md#c2-capacity-model-and-connection-budget
+      - docs/sessions/2026-11-26-S295-meeting-advisory-db01-well-architected.md
+    owner: tech lead
+    due: 2026-12-31
+    due_note: on the pilot data date
+
+  - id: GL-22
+    kind: gate
+    gate_date: pilot_data
+    title: "Pilot recovery posture written: recovery point and recovery time targets in the pilot letter and the DPA annex, and a rule that no paid or catalogue-wide batch run starts during the pilot agency's working hours; a Multi-AZ database and a second NAT stay prod items"
+    source: "S295 security review, resilience (no recovery targets for the pilot on a shared single-AZ database)"
+    proof: []
+    refs:
+      - docs/guides/cio.md
+      - docs/ops/runbooks/restore-rds-pitr.md
+      - docs/legal/pilot-contract-set.md#5-readiness-checks-before-the-pilot-letter-is-signed
+      - docs/audits/2026-11-27-S295-advisory/security-audit-public-summary.md#roadmap
+    owner: tech lead
+    due: 2026-12-31
+    due_note: before the pilot letter is signed
+    note: "The review proposes a 15-minute recovery point for an instance loss, 24 hours for a region loss, and a 4-hour recovery time; the pilot letter wording is the business owner's. The CIO guide's backup window was corrected to 14 days in S297."
+
   - id: GL-18
     kind: date
+    gate_date: golive
     title: "Go-live date"
     source: "ADR 0012 decision 11 trigger (D-16)"
     value: null
@@ -235,3 +299,16 @@ items:
       - docs/audits/2026-10-30-S260-go-live-readiness/README.md#8-decision-and-sign-off
     owner: business owner
     note: "Setting it starts the three-to-four-week prod build; every open line is then re-dated to fall on or before it."
+
+  - id: GL-19
+    kind: date
+    gate_date: pilot_data
+    title: "Pilot data date"
+    source: "ADR 0019 d16 pilot terms; the pilot letter's pilot-environment clause (no real client data before AA confirms the pilot safeguards in writing)"
+    value: null
+    proof: []
+    refs:
+      - docs/legal/pilot-contract-set.md#2-partner-terms-clauses-for-the-pilot-letter-later-the-partner-agreement
+      - docs/legal/dpa.md#15-pilot-terms-adr-0019-d16
+    owner: business owner
+    note: "The day the first real agency data lands in any app (the pilot runs on Dev). Setting it bounds every line marked 'pilot data'; it falls on or before the go-live date."

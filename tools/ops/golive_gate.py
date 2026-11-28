@@ -5,7 +5,12 @@ guard that keeps every line honest (workflow .github/workflows/golive-gate.yml).
 The checklist is docs/ops/go-live/checklist.yaml: the eight items of the ADR 0012 go-live gate (decision 11), the proofs
 a first real agency needs (S282 audit R09, R10, R30, R39, R45: price and photo coverage, the Booking per-partner restore
 drill, a bounded load test, the edge rate limits, a prod capacity baseline, the enforce_admins plan, no real personal
-data before the DPA is signed, the AI caps at prod of the S283 decision) and one line for the go-live date itself.
+data before the DPA is signed, the AI caps at prod of the S283 decision), the pilot items of the S295 security review
+(S297), and two gate dates: the go-live date (prod opens to real users) and the pilot data date (the first real agency
+data lands in any app, on Dev during the pilot).
+
+Each gate line names the gate date it must be met before (``gate_date``: ``golive``, the default, or ``pilot_data``). A
+line bound to the pilot data date is needed before the go-live date as well, so both dates bound it.
 
 Every line either links a proof (a repo path or an https URL), or names an owner role and an ISO due date. ``check``
 fails (exit 1) on:
@@ -14,8 +19,11 @@ fails (exit 1) on:
     Markdown file does not have;
   - an owner that is not a known role (company docs name roles, never people);
   - an open line (no proof) without an owner or a due date, or whose due date has passed;
-  - the go-live date line without an owner (its value may stay unset only with an owner);
-  - once the go-live date is set: an open line due after it, or the date reached while lines are still open;
+  - a gate date line (go-live or pilot data) without an owner (its value may stay unset only with an owner), or a
+    checklist without exactly one line per gate date;
+  - once a gate date is set: an open line bound to it that is due after it, or the date reached while lines bound to
+    it are still open;
+  - a pilot data date set after the go-live date (real users bring real data, so real data never starts later);
   - the rendered list in docs/ops/go-live/README.md no longer matching the checklist (``render --write`` fixes it).
 
 ``render`` prints (or with --write rewrites) the generated block of docs/ops/go-live/README.md, between the markers
@@ -27,6 +35,7 @@ construct outside that subset is an error with its line number, never a silent m
 
     python3 tools/ops/golive_gate.py check
     python3 tools/ops/golive_gate.py check --today 2026-12-20      # what the weekly run will say on that day
+    python3 tools/ops/golive_gate.py check --golive 2027-02-01 --pilot-data 2026-12-15   # try dates before setting them
     python3 tools/ops/golive_gate.py render --write
 """
 from __future__ import annotations
@@ -51,11 +60,18 @@ END_RE = re.compile(r"^<!--\s*golive-gate:end\s*-->\s*$")
 # Company docs name roles, not people (language convention, S255).
 ROLES = ("tech lead", "business owner", "engineer on duty")
 KINDS = ("gate", "date")
+# The two gate dates (S297): a gate line is due at one of them (and at its own ISO due date, whichever comes first).
+GATE_DATES = ("golive", "pilot_data")
+GATE_LABELS = {"golive": "go-live date", "pilot_data": "pilot data date"}
+SHORT_LABELS = {"golive": "go-live", "pilot_data": "pilot data"}
+# A line needed before the first real pilot data is needed before prod opens to real users too.
+BOUNDS = {"golive": ("golive",), "pilot_data": ("pilot_data", "golive")}
 ITEM_ID = re.compile(r"^GL-[0-9]{2}$")
 ISO_DATE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
 URL = re.compile(r"^https://[A-Za-z0-9.-]+(/[^\s]*)?$")
 TOP_KEYS = {"version", "updated", "items"}
-ITEM_KEYS = {"id", "kind", "title", "source", "owner", "due", "due_note", "value", "proof", "refs", "note"}
+ITEM_KEYS = {"id", "kind", "title", "source", "owner", "due", "due_note", "value", "proof", "refs", "note",
+             "gate_date"}
 REQUIRED_ITEM_KEYS = ("id", "kind", "title", "source")
 
 
@@ -327,6 +343,14 @@ def check_link(link: Any, root: Path) -> Optional[str]:
     return None
 
 
+def gate_date_of(item: dict) -> Any:
+    """The gate date a line belongs to: a date line records it, a gate line must be met before it (default golive)."""
+    value = item.get("gate_date")
+    if value is None and item.get("kind") == "gate":
+        return "golive"
+    return value
+
+
 def evaluate(doc: dict, today: date, root: Path = REPO_ROOT) -> tuple[list[str], list[str], dict]:
     """(errors, warnings, summary) for one checklist document."""
     errors: list[str] = []
@@ -344,7 +368,7 @@ def evaluate(doc: dict, today: date, root: Path = REPO_ROOT) -> tuple[list[str],
         return errors, warnings, {}
 
     seen: set[str] = set()
-    date_lines = []
+    date_lines: dict[str, list] = {key: [] for key in GATE_DATES}
     gates = []
     for pos, item in enumerate(items, start=1):
         where = f"item {pos}"
@@ -382,12 +406,17 @@ def evaluate(doc: dict, today: date, root: Path = REPO_ROOT) -> tuple[list[str],
                 problem = check_link(link, root)
                 if problem:
                     errors.append(f"{where}: {field} {problem}")
+        gate_date = gate_date_of(item)
+        if kind in KINDS and gate_date not in GATE_DATES:
+            errors.append(f"{where}: gate_date must be one of {', '.join(GATE_DATES)}"
+                          + (" (required on a date line)" if kind == "date" and gate_date is None else ""))
         if kind == "date":
-            date_lines.append((where, item))
+            if gate_date in GATE_DATES:
+                date_lines[gate_date].append((where, item))
             continue
         if item.get("value") is not None:
-            errors.append(f"{where}: value is only for the go-live date line")
-        if kind == "gate":
+            errors.append(f"{where}: value is only for a gate date line (kind: date)")
+        if kind == "gate" and gate_date in GATE_DATES:
             gates.append((where, item, due))
             if not _as_list(item.get("proof")):
                 if owner is None or due_raw is None:
@@ -395,32 +424,44 @@ def evaluate(doc: dict, today: date, root: Path = REPO_ROOT) -> tuple[list[str],
                 elif due is not None and due < today:
                     errors.append(f"{where}: due {due.isoformat()} has passed with no proof (owner: {owner})")
 
-    golive: Optional[date] = None
-    if len(date_lines) != 1:
-        errors.append(f"exactly one go-live date line (kind: date) is required, found {len(date_lines)}")
-    else:
-        where, item = date_lines[0]
+    dates: dict[str, Optional[date]] = {key: None for key in GATE_DATES}
+    for key in GATE_DATES:
+        label = GATE_LABELS[key]
+        lines = date_lines[key]
+        if len(lines) != 1:
+            errors.append(f"exactly one {label} line (kind: date, gate_date: {key}) is required, found {len(lines)}")
+            continue
+        where, item = lines[0]
         if item.get("owner") is None:
-            errors.append(f"{where}: the go-live date line needs an owner role")
+            errors.append(f"{where}: the {label} line needs an owner role")
         value = item.get("value")
         if value is None:
-            warnings.append(f"{where}: the go-live date is not set (owner: {item.get('owner') or 'none'})")
+            warnings.append(f"{where}: the {label} is not set (owner: {item.get('owner') or 'none'})")
         else:
-            golive = _date(value)
-            if golive is None:
+            dates[key] = _date(value)
+            if dates[key] is None:
                 errors.append(f"{where}: value must be an ISO date (YYYY-MM-DD) or null")
         if item.get("due") is not None and _date(item.get("due")) is not None and item.get("value") is None \
                 and _date(item["due"]) < today:
-            errors.append(f"{where}: the go-live date was due {item['due']} and is still not set")
+            errors.append(f"{where}: the {label} was due {item['due']} and is still not set")
 
+    golive, pilot = dates["golive"], dates["pilot_data"]
+    if golive is not None and pilot is not None and pilot > golive:
+        errors.append(f"the pilot data date {pilot.isoformat()} is after the go-live date {golive.isoformat()}: real "
+                      "users bring real data, so set the pilot data date on or before the go-live date")
     open_gates = [(w, it, d) for w, it, d in gates if not _as_list(it.get("proof"))]
-    if golive is not None:
-        for where, _item, due in open_gates:
-            if due is not None and due > golive:
-                errors.append(f"{where}: due {due.isoformat()} is after the go-live date {golive.isoformat()}")
-        if today >= golive and open_gates:
-            errors.append(f"the go-live date {golive.isoformat()} is reached with {len(open_gates)} open line(s): "
-                          + ", ".join(w for w, _, _ in open_gates))
+    for key in GATE_DATES:
+        bound = dates[key]
+        if bound is None:
+            continue
+        label = GATE_LABELS[key]
+        bound_open = [(w, d) for w, it, d in open_gates if key in BOUNDS[gate_date_of(it)]]
+        for where, due in bound_open:
+            if due is not None and due > bound:
+                errors.append(f"{where}: due {due.isoformat()} is after the {label} {bound.isoformat()}")
+        if today >= bound and bound_open:
+            errors.append(f"the {label} {bound.isoformat()} is reached with {len(bound_open)} open line(s): "
+                          + ", ".join(w for w, _ in bound_open))
     soon = [w for w, _, d in open_gates if d is not None and today <= d and (d - today).days <= 14]
     if soon:
         warnings.append("due within 14 days with no proof yet: " + ", ".join(soon))
@@ -428,7 +469,9 @@ def evaluate(doc: dict, today: date, root: Path = REPO_ROOT) -> tuple[list[str],
         "lines": len(gates),
         "met": len(gates) - len(open_gates),
         "open": len(open_gates),
+        "open_before_pilot_data": sum(1 for _, it, _ in open_gates if gate_date_of(it) == "pilot_data"),
         "golive_date": golive.isoformat() if golive else None,
+        "pilot_data_date": pilot.isoformat() if pilot else None,
     }
     return errors, warnings, summary
 
@@ -457,18 +500,22 @@ def _link(link: str, page: str) -> str:
 def render(doc: dict, page: str = PAGE) -> str:
     items = [it for it in doc.get("items", []) if isinstance(it, dict)]
     gates = [it for it in items if it.get("kind") == "gate"]
-    date_line = next((it for it in items if it.get("kind") == "date"), None)
     met = sum(1 for it in gates if _as_list(it.get("proof")))
+    open_pilot = sum(1 for it in gates if not _as_list(it.get("proof")) and gate_date_of(it) == "pilot_data")
     out = [f"Checklist version {doc.get('version')}, updated {doc.get('updated')}: "
-           f"**{met} of {len(gates)} lines met**, {len(gates) - met} open."]
-    if date_line is not None:
+           f"**{met} of {len(gates)} lines met**, {len(gates) - met} open "
+           f"({open_pilot} of them due before the pilot data date)."]
+    for key in GATE_DATES:
+        date_line = next((it for it in items if it.get("kind") == "date" and it.get("gate_date") == key), None)
+        if date_line is None:
+            continue
         value = date_line.get("value")
         out.append("")
-        out.append(f"**Go-live date ({date_line.get('id')}):** "
+        out.append(f"**{GATE_LABELS[key].capitalize()} ({date_line.get('id')}):** "
                    + (f"{value}." if value else f"not set; owner: {date_line.get('owner')}.")
                    + (f" {_cell(date_line['note'])}" if date_line.get("note") else ""))
-    out += ["", "| # | Line | Source | Status | Proof | Evidence so far | Owner | Due |",
-            "|---|---|---|---|---|---|---|---|"]
+    out += ["", "| # | Line | Source | Before | Status | Proof | Evidence so far | Owner | Due |",
+            "|---|---|---|---|---|---|---|---|---|"]
     for it in gates:
         proof = _as_list(it.get("proof"))
         refs = _as_list(it.get("refs"))
@@ -482,6 +529,7 @@ def render(doc: dict, page: str = PAGE) -> str:
             _cell(it.get("id")),
             title,
             _cell(it.get("source", "")),
+            SHORT_LABELS.get(gate_date_of(it), _cell(gate_date_of(it))),
             "met" if proof else "open",
             ", ".join(_link(p, page) for p in proof) or "—",
             ", ".join(_link(r, page) for r in refs) or "—",
@@ -510,11 +558,17 @@ def cmd_check(args: argparse.Namespace) -> int:
     today = date.fromisoformat(args.today) if args.today else datetime.now(timezone.utc).date()
     try:
         doc = load_checklist(root, args.checklist)
-        errors, warnings, summary = evaluate(doc, today, root)
+        stale = False
         if not args.no_page:
             page_text = (root / PAGE).read_text(encoding="utf-8")
-            if splice(page_text, render(doc)) != page_text:
-                errors.append(f"{PAGE}: the rendered list is stale; run python3 tools/ops/golive_gate.py render --write")
+            stale = splice(page_text, render(doc)) != page_text
+        what_if = {"golive": args.golive, "pilot_data": args.pilot_data}
+        for item in doc.get("items") or []:
+            if isinstance(item, dict) and item.get("kind") == "date" and what_if.get(item.get("gate_date")):
+                item["value"] = what_if[item["gate_date"]]
+        errors, warnings, summary = evaluate(doc, today, root)
+        if stale:
+            errors.append(f"{PAGE}: the rendered list is stale; run python3 tools/ops/golive_gate.py render --write")
     except (GateError, OSError) as exc:
         errors, warnings, summary = [str(exc)], [], {}
     for w in warnings:
@@ -523,7 +577,9 @@ def cmd_check(args: argparse.Namespace) -> int:
         print(f"::error title=Go-live gate::{e}")
     status = "FAIL" if errors else "OK"
     line = (f"go-live gate {status} on {today.isoformat()}: {summary.get('met', '?')} of {summary.get('lines', '?')} "
-            f"lines met, {summary.get('open', '?')} open, go-live date {summary.get('golive_date') or 'not set'}, "
+            f"lines met, {summary.get('open', '?')} open ({summary.get('open_before_pilot_data', '?')} before the pilot "
+            f"data date), go-live date {summary.get('golive_date') or 'not set'}, "
+            f"pilot data date {summary.get('pilot_data_date') or 'not set'}, "
             f"{len(errors)} error(s), {len(warnings)} warning(s)")
     print(line)
     if args.summary:
@@ -563,6 +619,8 @@ def main(argv: Optional[list[str]] = None) -> int:
     c.add_argument("--today", help="ISO date to check against (default: today, UTC)")
     c.add_argument("--summary", help="append a Markdown summary to this file (GITHUB_STEP_SUMMARY)")
     c.add_argument("--no-page", action="store_true", help="skip the rendered-page comparison")
+    c.add_argument("--golive", help="what if: check as if the go-live date were this ISO date (the file is unchanged)")
+    c.add_argument("--pilot-data", help="what if: check as if the pilot data date were this ISO date")
     r = sub.add_parser("render", help="print or rewrite the rendered list")
     r.add_argument("--write", action="store_true", help=f"rewrite the generated block of {PAGE}")
     args = ap.parse_args(argv)
