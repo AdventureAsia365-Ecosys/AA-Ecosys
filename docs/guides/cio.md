@@ -106,7 +106,7 @@ The only retention registry is the DM-7 table in
 | Job rows | succeeded 30 days, failed 90 days |
 | Outbox and inbox payload personal data | redacted after 90 days (to build) |
 | Staff and Booking audit logs | kept; a window is set before prod |
-| RDS automated backups / manual snapshots | 7 days on Dev (14 in prod) / 30 days |
+| RDS automated backups / manual snapshots | 14 days on Dev and in prod (root ADR 0019 d16) / 30 days |
 
 A retention change needs the tech lead's approval and lands as an amendment to that table (DM-7.5).
 
@@ -114,7 +114,7 @@ A retention change needs the tech lead's approval and lands as an amendment to t
 
 | | Dev today | Prod target (DM-9.6, proposed) |
 |---|---|---|
-| Backups | Automated, 7-day point-in-time recovery, single-AZ | Multi-AZ, 14-day PITR, AWS Backup with a cross-region copy |
+| Backups | Automated, 14-day point-in-time recovery (root ADR 0019 d16), single-AZ | Multi-AZ, 14-day PITR, AWS Backup with a cross-region copy |
 | RPO (data loss) | Minutes within the PITR window | ≤ 15 min (instance loss), ≤ 24 h (region loss) |
 | RTO (downtime) | Restore drills took about 22 min (2026-10-17) and 21 min (2026-10-23) | ≤ 1 h (AZ or instance), ≤ 4 h (region) |
 | Drills | When the procedure changes and once before prod (DM-9.3) | Quarterly |
