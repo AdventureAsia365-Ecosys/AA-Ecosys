@@ -988,12 +988,15 @@ class RealRegisterTest(unittest.TestCase):
             rc.assert_publishable(finding.title + "\n" + rc.issue_body(finding, report.as_of, ""), finding.title)
         rc.assert_publishable(json.dumps(rc.due_json(report, policy)), "due json")
 
-    def test_known_overdue_items_show_up(self):
-        """The S295 calendar's overdue items (register dates only) are red."""
+    def test_known_items_evaluate_as_expected(self):
+        """Register dates only: an unknown last rotation is red; the S295 calendar's overdue items closed in S297 are not."""
         report = rc.evaluate(sr.load(), rc.Inventory(), rc.load_policy(), dt.date(2026, 11, 30))
         red = {i.entry.key for i in report.items if i.level == rc.RED}
-        self.assertIn("vendor:github GitHub personal access tokens (pqnghiep1354)", red)
-        self.assertIn("iam:acc1 legacy static key (acc1-legacy-default)", red)
+        self.assertIn("local:agent-machine GitHub PAT of the MCP plugin", red)
+        # Closed 28/11/2026 (S297): the three unused PATs deleted (the row keeps only the gho_ token, due 2027-01-18)
+        # and the acc1 legacy static key deleted in IAM (row status deleted).
+        self.assertNotIn("vendor:github GitHub personal access tokens (pqnghiep1354)", red)
+        self.assertNotIn("iam:acc1 legacy static key (acc1-legacy-default)", red)
 
 
 class WorkflowTest(unittest.TestCase):
