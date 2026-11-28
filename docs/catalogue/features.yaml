@@ -318,7 +318,7 @@ features:
     status: live
     surface: ["page:/admin/tenants/plans", "route:admin_plans", "route:admin_tenant_subscription", "route:admin_tenant_addon_requests", "route:admin_pipeline/billing"]
     conditions:
-      settings: [cis.billing.rewrite_over_quota_mode]
+      settings: [cis.billing.rewrite_over_quota_mode, cis.billing.enabled_currencies]
     owner: finance
   - id: CIS-F020
     app: cis
@@ -956,7 +956,7 @@ features:
     summary: The machine API the agency CRM calls to quote, hold and book AA tours at the agency's B2B price, and the list of AA add-ons the agency can quote.
     roles: [machine]
     status: live
-    surface: ["route:b2b", "route:b2b_addons"]
+    surface: ["route:b2b", "route:b2b_addons", "route:b2b_tariff"]
     conditions:
       entitlements: [trade.book]
       settings: [booking.policy.b2b_hold_hours, booking.policy.b2b_hold_max_extensions, booking.policy.b2b_rehold_limit_per_day]

@@ -438,6 +438,14 @@ flowchart LR
 - **Agency price** = the rule price minus the agency's tier or rate-card discount.
 - **Provisional price** and **CIS reference price** are hints for staff. They are never a selling price.
 
+**Currency: USD only.** The platform shows and accepts one currency, USD. Which currencies are open is one setting,
+**Enabled currencies**, on CIS **Platform › Settings** (area billing; an administrator changes it and a second person
+approves). While only USD is enabled, CIS Plans & add-ons, Tenant 360, the Content studio billing page, the Booking
+software-fee drafts and the CRM proposals, payment settings and AA prices show no other currency, and a write in
+another currency is refused. Agencies saved earlier with VND are quoted and invoiced in USD; their saved value comes
+back if VND is enabled again. Supplier contracts and rates keep their own currency: Booking converts them to USD with
+the approved FX rate (C5).
+
 Approval rules. A maker never approves their own work, with one exception: the business owner, while the switch
 "The business owner may approve her own work" is on. Each such approval is flagged and listed in the audit log tab
 **Business-owner self-approvals**. This switch and the payout switch are in **Supply › Pricing policy**, section
