@@ -1,7 +1,7 @@
 ---
 id: OPS-08-s297-ui-evidence
 title: "S297 UI evidence: Compliance Calendar tab, USD-only billing (CIS admin, Booking staff admin, Partner CRM web)"
-description: "Agent-run read-only Playwright evidence on the Dev hosts, 28/11/2026: the CIS Compliance readiness Calendar tab and the USD-only billing surfaces of CIS, Booking and the Partner CRM web (Content studio billing and dashboard, CRM home, one proposal); one VND leftover on the Booking Agency billing KPI tiles."
+description: "Read-only Playwright evidence on Dev, 28/11/2026: the Compliance Calendar tab and the USD-only billing pages of CIS, Booking and the Partner CRM."
 type: report
 status: active
 owner: nghiep
