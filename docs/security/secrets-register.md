@@ -447,7 +447,9 @@ for an admin settings page once one exists):
   in a store that have no register row.
 
 Each finding is one issue in this repo with the label `secret-rotation`, titled `Secret rotation: <store> <name>`:
-the next run edits it when the finding changes and closes it when the row is green. Fix the cause, then record the new
+the next run edits it when the finding changes and closes it when the row is green. It closes an issue only when
+that run read the issue's store: when the AWS role or the GitHub inventory (or one store) could not be read, the
+store-backed issues stay open and the run opens a "check could not read" issue instead. Fix the cause, then record the new
 `last_rotated` / `next_due` here in the same PR as any copy change. A manual run (`workflow_dispatch`) is a dry run
 unless `apply` is ticked. Every run also keeps `rotation-due.json` (every row's due date, for the ops calendar) as a
 14-day artifact. Local dry run, register dates and RDAP only:

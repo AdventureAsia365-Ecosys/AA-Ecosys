@@ -46,6 +46,15 @@ the move of the aa-ecosys-ci-bot private key into one `ci-bot` environment per r
   repo keep the App key, in `environment: ci-bot`. Docs Gen is split into render (OIDC, no environment) and publish
   (ci-bot) jobs, because an environment changes the OIDC subject the plan role trusts.
 
+- **Close only what was checked** (review fix, S297): a store-backed finding ("missing from", "unregistered names",
+  KMS rotation off, ACM renewal FAILED, a stale copy proven by GitHub `updated_at`) simply drops out when its source
+  cannot be read. `sync_issues` therefore reads each open issue's key marker, maps its store to the source that feeds
+  it (`_store_source`, the same stores `_live_names` reads) and closes it only when that source is `ok` in the run's
+  coverage; otherwise it logs "kept #n open, not checked this run" and writes nothing (no false "Green" comment, no
+  split history). A "source X" issue closes only when X (or, for the umbrella `aws` / `github`, any `aws:*` /
+  `github:*` source) was attempted. Register-only stores (vercel, vendor, local, lambda-env, other accounts) close as
+  before. An issue with no key marker is never closed (fails closed).
+
 ## Changed
 
 - Root: `tools/security/rotation_check.py`, `rotation_check.toml`, `test_rotation_check.py` (50 tests, in the Docs

@@ -28,7 +28,8 @@ Levels (windows and caps: tools/security/rotation_check.toml, never constants he
   GREEN  everything else.
 
 Outputs: one GitHub issue per finding in the root repo, label `secret-rotation` (deduplicated by title, edited when the
-finding changes, closed when the row turns green); a machine-readable JSON of every row's due date for the ops
+finding changes, closed when the row turns green in a run that READ its store: an issue whose store (or the whole
+AWS / GitHub side) could not be read stays open, because its finding may only have dropped out); a machine-readable JSON of every row's due date for the ops
 calendar (--json-out); a Markdown summary (--summary). Dry run by default: --apply writes issues.
 
 Every AWS call goes through AwsCli, which refuses any operation outside AWS_CALLS; `iam-actions` prints the IAM
@@ -926,6 +927,50 @@ def issue_body(finding: Finding, as_of: dt.date, run_url: str) -> str:
             f"{KEY_MARKER}{finding.key} -->")
 
 
+def _issue_key(body: str) -> Optional[str]:
+    start = body.rfind(KEY_MARKER)
+    if start < 0:
+        return None
+    end = body.find(" -->", start)
+    return body[start + len(KEY_MARKER):end].strip() if end > 0 else None
+
+
+def _store_source(store: str, policy: Policy) -> Optional[str]:
+    """The source a store's live findings come from (the same stores _live_names reads); None = register only."""
+    kind, rest = _store_kind(store)
+    label = policy.aws_account_label
+    if kind == "github":
+        return f"github:{rest.split('/', 1)[0]}"
+    if kind in ("secretsmanager", "kms", "iam") and rest == label:
+        return f"aws:{kind}"
+    if kind in ("cognito", "rds"):
+        return f"aws:{kind}"
+    if kind == "acm":
+        return f"aws:acm:{rest}"
+    if kind == "domain":
+        return "rdap"
+    return None
+
+
+def _unchecked(key: Optional[str], coverage: dict, policy: Policy) -> Optional[str]:
+    """Why an open issue was NOT checked this run (so a missing finding does not mean green), or None if it was.
+
+    A store-backed finding drops out when its source could not be read (_live_names / _unregistered skip it), so
+    closing it then would post a false 'Green'. Fails closed: an issue without a key marker is never closed."""
+    if key is None:
+        return "the issue has no rotation-check key marker"
+    if key.startswith("source "):
+        source = key[len("source "):]
+        if source in coverage or (source in ("aws", "github") and any(k.startswith(source + ":") for k in coverage)):
+            return None
+        return f"{source} was not attempted"
+    store = key[len("unregistered "):] if key.startswith("unregistered ") else key.split(" ", 1)[0]
+    source = _store_source(store, policy)
+    if source is None or coverage.get(source) == "ok":
+        return None
+    return f"{source} was not read" if source in coverage else f"{source} was not attempted"
+
+
 def sync_issues(report: Report, policy: Policy, gh: GitHub, repo: str, apply: bool, run_url: str = "") -> list:
     """Open, edit and close the labelled issues so they match the findings. Returns the plan / action lines."""
     log: list = []
@@ -978,6 +1023,10 @@ def sync_issues(report: Report, policy: Policy, gh: GitHub, repo: str, apply: bo
         if title in wanted or not title.startswith(TITLE_PREFIX):
             continue
         n = issue["number"]
+        why = _unchecked(_issue_key(issue.get("body") or ""), report.coverage, policy)
+        if why:
+            log.append(f"kept #{n} open, not checked this run: {why}")
+            continue
         comment = f"Green in the Secret rotation check of {report.as_of}" + (f" ({run_url})" if run_url else "") + "."
         assert_publishable(comment, f"comment on #{n}")
         if write("POST", f"{path}/issues/{n}/comments", {"body": comment}, f"comment #{n} green"):

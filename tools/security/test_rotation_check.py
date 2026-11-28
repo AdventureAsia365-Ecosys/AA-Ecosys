@@ -676,7 +676,8 @@ class SyncIssuesTest(unittest.TestCase):
         issues = [
             {"number": 1, "title": overdue.title, "body": unchanged_body},
             {"number": 2, "title": "Secret rotation: secretsmanager:acc2 demo/dev/db-password", "body": "old text"},
-            {"number": 3, "title": "Secret rotation: secretsmanager:acc2 demo/dev/hmac", "body": "was red"},
+            {"number": 3, "title": "Secret rotation: secretsmanager:acc2 demo/dev/hmac",
+             "body": f"was red\n{rc.KEY_MARKER}secretsmanager:acc2 demo/dev/hmac -->"},
             {"number": 4, "title": "Someone else's issue with the label", "body": ""},
             {"number": 5, "title": "Secret rotation: a pull request", "body": "", "pull_request": {}},
         ]
@@ -696,6 +697,67 @@ class SyncIssuesTest(unittest.TestCase):
         for m, u, b in fake.calls:
             if m == "POST" and u.endswith("/issues"):
                 self.assertEqual(b["labels"], ["secret-rotation"])
+
+    def _open(self, number, key):
+        return {"number": number, "title": f"Secret rotation: {key}", "body": f"was red\n{rc.KEY_MARKER}{key} -->"}
+
+    def test_unread_aws_keeps_store_issues_open(self):
+        # The role could not be assumed: the workflow passes --aws-unavailable, so no aws:* source is read and every
+        # AWS-backed finding drops out. Those issues stay open, with no 'Green' comment.
+        inv = full_inventory()
+        inv.sources = {"github:Demo-App": "ok", "rdap": "ok", "aws": "error: the role was not assumed"}
+        report = rc.evaluate(self.reg, inv, self.policy, TODAY)
+        issues = [self._open(11, "secretsmanager:acc2 demo/dev/gone"),
+                  self._open(12, "unregistered secretsmanager:acc2"),
+                  self._open(13, "kms:acc2 alias/demo-data"),
+                  self._open(14, "acm:us-west-1 gone.demo.example"),
+                  self._open(15, "source aws:kms"),
+                  self._open(16, "github:Demo-App DEMO_GONE")]
+        fake = FakeGitHub(issues=issues)
+        log = rc.sync_issues(report, self.policy, self.gh(fake), "Demo-Org/Demo-Root", apply=True)
+        touched = {u.rsplit("/issues/", 1)[1].split("/")[0] for m, u, _ in fake.calls
+                   if m != "GET" and "/issues/" in u}
+        self.assertFalse(touched & {"11", "12", "13", "14", "15"}, log)
+        self.assertFalse(any(b and "Green" in str(b.get("body", "")) and u.endswith(("/11/comments", "/12/comments"))
+                             for _, u, b in fake.calls))
+        for n in (11, 12, 13, 14, 15):
+            self.assertTrue(any(line.startswith(f"kept #{n} open, not checked this run") for line in log), log)
+        self.assertIn("16", touched, "GitHub was read, so its green row closes")
+
+    def test_unread_github_repo_keeps_its_issues_open(self):
+        inv = full_inventory()
+        inv.sources["github:Demo-App"] = "error: GET /repos/Demo-Org/Demo-App/actions/secrets: HTTP 403"
+        report = rc.evaluate(self.reg, inv, self.policy, TODAY)
+        issues = [self._open(21, "github:Demo-App/dev DEMO_GONE"), self._open(22, "unregistered github:Demo-App"),
+                  self._open(23, "secretsmanager:acc2 demo/dev/hmac")]
+        fake = FakeGitHub(issues=issues)
+        log = rc.sync_issues(report, self.policy, self.gh(fake), "Demo-Org/Demo-Root", apply=True)
+        closed = {u.rsplit("/", 1)[1] for m, u, _ in fake.calls if m == "PATCH"}
+        self.assertNotIn("21", closed)
+        self.assertNotIn("22", closed)
+        self.assertIn("23", closed)
+        self.assertIn("kept #21 open, not checked this run: github:Demo-App was not read", log)
+
+    def test_source_issue_closes_only_when_attempted_and_register_rows_close(self):
+        inv = full_inventory()
+        report = rc.evaluate(self.reg, inv, self.policy, TODAY)
+        issues = [self._open(31, "source aws"), self._open(32, "source aws:kms"), self._open(33, "source github"),
+                  self._open(34, "vercel:demo DEMO_VERCEL_GONE"),
+                  {"number": 35, "title": "Secret rotation: no marker", "body": "hand-edited"}]
+        fake = FakeGitHub(issues=issues)
+        log = rc.sync_issues(report, self.policy, self.gh(fake), "Demo-Org/Demo-Root", apply=True)
+        closed = {u.rsplit("/", 1)[1] for m, u, _ in fake.calls if m == "PATCH" and "/issues/3" in u}
+        self.assertEqual(closed & {"31", "32", "33", "34", "35"}, {"31", "32", "33", "34"})
+        self.assertIn("kept #35 open, not checked this run: the issue has no rotation-check key marker", log)
+
+    def test_no_aws_flag_at_all_keeps_aws_issues_open(self):
+        inv = full_inventory()
+        inv.sources = {"github:Demo-App": "ok"}
+        report = rc.evaluate(self.reg, inv, self.policy, TODAY)
+        fake = FakeGitHub(issues=[self._open(41, "source aws"), self._open(42, "rds:demo-db rds-ca-demo-g1"),
+                                  self._open(43, "domain:demo demo.example")])
+        log = rc.sync_issues(report, self.policy, self.gh(fake), "Demo-Org/Demo-Root", apply=True)
+        self.assertFalse(any(m == "PATCH" for m, _, _ in fake.calls), log)
 
     def test_write_cap(self):
         policy = rc.load_policy(_tmp(POLICY.replace("max_writes_per_run = 60", "max_writes_per_run = 2"), ".toml"))

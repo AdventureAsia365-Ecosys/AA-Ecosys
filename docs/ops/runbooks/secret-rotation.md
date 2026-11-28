@@ -41,7 +41,8 @@ row before its date. Secrets Manager rotation is enabled on 0 of the secrets; ev
 The secrets register (AA-878): `docs/security/secrets-register.md` and `.yaml` (names, consumers, copies, status;
 never values). Look up the secret's row first: it names every copy (GitHub, Vercel, Lambda) that must change with it.
 The weekly Secret rotation check (root `.github/workflows/secret-rotation.yml`) opens one issue labelled
-`secret-rotation` per overdue, unknown or missing item and closes it once the row is green; it trusts the GitHub
+`secret-rotation` per overdue, unknown or missing item and closes it once the row is green in a run that read its
+store (a week where AWS or GitHub could not be read leaves those issues open); it trusts the GitHub
 `updated_at`, Cognito client secret and IAM key dates, so a copy you forgot shows up as stale the following Monday.
 
 ## Preconditions
