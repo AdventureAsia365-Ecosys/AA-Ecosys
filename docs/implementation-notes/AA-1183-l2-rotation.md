@@ -92,3 +92,11 @@ the move of the aa-ecosys-ci-bot private key into one `ci-bot` environment per r
 - Local dry run (register dates + RDAP, no token, no AWS): `python3 tools/security/rotation_check.py run --rdap`.
   On 28/11/2026 it reported 5 red rows from the register alone: the acc1 legacy key, the two local agent-machine
   tokens (unknown dates), the GitHub personal access tokens and the Vercel account tokens (due 27/11).
+- S297 close (register PR #1062, 28/11/2026): the tech lead deleted the three PATs, revoked the Vercel account tokens
+  and deleted the acc1 legacy key, so three of those five red rows are closed (the PAT row now covers only the `gho_`
+  token, next due 2027-01-18); `test_rotation_check.RealRegisterTest` was re-pinned to that state. The ops calendar
+  line OC-010 reads `ok` (0 past due). Still open: the old App private key in the App settings (tech lead) and the
+  two local agent-machine tokens with unknown dates.
+- The RDS-managed master row keeps the placeholder name `rds!db-<id> (...)` (public repo). With status `keep`, the
+  weekly rotation check (and the Infra drift check) will report it missing and list the real `rds!db-...` name as
+  unregistered, until those checks learn to match the `rds!db-` prefix (follow-up).
