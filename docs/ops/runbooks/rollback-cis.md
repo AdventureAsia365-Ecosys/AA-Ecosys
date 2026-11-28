@@ -21,6 +21,18 @@ Moved here from `skill/aa-ship/SKILL.md` §5 (AA-869, S241). The skill now links
 ECS service, with the helper `tools/ops/ecs_rollback.sh`: [roll back any ECS service](rollback-ecs.md) (run it once per
 service: api, then worker on the same image).
 
+## Automatic rollback first (AA-1193)
+
+Deploy Dev (`deploy-dev.yml`) rolls api AND worker back by itself when its post-deploy verify is red on `main`: job
+`rollback` re-asks the deploy gate, moves both services to the revisions they ran before the deploy (all or none, one
+image), waits `services-stable`, checks that `/health` answers the previous commit, then alerts the ops topic and keeps
+the `deploy-smoke-red` issue. Details, refusals and the drill: [roll back any ECS service](rollback-ecs.md), section
+"Automatic rollback after a red post-deploy check". Use this page by hand when:
+
+- the run says `not rolled back (held by the deploy gate: ...)`: wait for the wave or the deploy-blocking job, then
+  follow the steps below (or use an override reason, tech lead only);
+- the run says `not rolled back (refused: ...)` or `ROLLBACK FAILED`, or the problem showed up after the verify passed.
+
 ## When to use
 
 - Trigger: a CIS deploy finished (rollout `COMPLETED`) but the app is wrong: 5xx on changed routes, wrong data,
