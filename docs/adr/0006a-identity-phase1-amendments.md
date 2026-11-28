@@ -1246,7 +1246,10 @@ all off at once).
   a look-alike). Real staff never read the switch.
 - **CIS:** `api/core/pilot_fence.py`; the resolver refuses such a session 403 `e2e_pilot_fence` before every other E2E
   rule, and `e2e_staff.dev_only_e2e_environment()` answers False, so the other E2E exceptions close too. The sign-in
-  page shows `/login?error=pilot_fence`.
+  page shows `/login?error=pilot_fence`. Fail closed like Booking: while a task cannot read the switch (no settings
+  snapshot yet or since start-up, or the stored value refused) the same identities get 403 `e2e_pilot_fence_unknown`
+  and the exceptions stay closed. The academy (`/learn/v1`, the one staff token path outside the resolver) refuses
+  them too.
 - **Booking:** reads the value in force through the read-only contract view `catalog.v_pilot_fence_v1` (CIS 496,
   SELECT to `booking` only; the CIS 415 settings precedent, not a grant on the settings tables). Refused 403
   `e2e_pilot_fence`, or 403 `e2e_pilot_fence_unknown` when the view cannot be read (fail closed, E2E identities only).
