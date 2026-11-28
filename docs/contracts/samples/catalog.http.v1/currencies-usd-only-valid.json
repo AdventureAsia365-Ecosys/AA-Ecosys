@@ -1,0 +1,11 @@
+{
+  "contract": "catalog.http.v1",
+  "schema": "Currencies",
+  "expect": "valid",
+  "why": "AA-1191 (1.5): the default answer, USD only, kept by the CRM for the setting's cache window",
+  "payload": {
+    "enabled": ["USD"],
+    "base": "USD",
+    "cache_s": 60
+  }
+}

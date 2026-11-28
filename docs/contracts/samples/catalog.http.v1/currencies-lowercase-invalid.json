@@ -1,0 +1,11 @@
+{
+  "contract": "catalog.http.v1",
+  "schema": "Currencies",
+  "expect": "invalid",
+  "why": "AA-1191 (1.5): a currency code is three upper-case letters",
+  "payload": {
+    "enabled": ["USD", "vnd"],
+    "base": "USD",
+    "cache_s": 60
+  }
+}
