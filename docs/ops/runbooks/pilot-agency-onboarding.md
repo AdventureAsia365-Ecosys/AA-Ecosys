@@ -12,7 +12,7 @@ review_every_days: 90
 last_tested: untested
 tested_where: null
 tested_evidence: null
-related: [OPS-12-pilot-rehearsal, OPS-03-pilot-tenant, OPS-05-ecs-exec, AA-1086, AA-1093, AA-1082, docs/adr/0019-b2b-only-ecosystem-model.md, docs/adr/0006a-identity-phase1-amendments.md]
+related: [OPS-12-pilot-rehearsal, OPS-03-pilot-tenant, OPS-05-ecs-exec, AA-1086, AA-1093, AA-1082, AA-1054, docs/adr/0019-b2b-only-ecosystem-model.md, docs/adr/0006a-identity-phase1-amendments.md]
 ---
 
 # Onboard a pilot agency
@@ -51,6 +51,7 @@ one pilot at most, unique index `tenants_one_pilot_key`; a CHECK makes it `kind`
 | The CRM backs it up every night and its clean-up skips it | AA-Partner job kind `crm_pilot_backup`; `app/lifecycle/pilot.py` (marker `crm.tenant.is_pilot`, projected by `crm_entitlement_pull`) |
 | Agents never read its personal data | root `.claude/hooks/pilot_pii_guard.py` |
 | Its end date is reported, never acted on | AA-CIS-App job kind `tenant_account_tick` (hourly), log line `tenant_pilot_ended` |
+| On the pilot day every Dev-only E2E staff identity stops working ([Pilot day](#pilot-day-fence-the-dev-only-e2e-identities)) | CIS setting `cis.platform.pilot_e2e_fence`: AA-CIS-App `api/core/pilot_fence.py`, AA-Booking `app/auth/pilot_fence.py` (through `catalog.v_pilot_fence_v1`); AA-CIS-Infra `tools/identity/e2e_identity_fence.py` disables the Cognito users |
 
 > [!NOTE]
 > On Dev the CRM creates synthetic agencies only (AA-Partner `app/agencies.py`, `SYNTHETIC_ONLY_ENVIRONMENTS`), so the
@@ -93,6 +94,32 @@ one pilot at most, unique index `tenants_one_pilot_key`; a CHECK makes it `kind`
    CRM. Otherwise that identity can open S-02 views and S-04 support sessions on the real
    agency, which breaks root ADR 0006a A10b-1 (E2E writes on synthetic tenants only) and the pilot personal-data rule.
    There is no waiver for this check.
+
+## Pilot day: fence the Dev-only E2E identities
+
+Tech lead decision S295 (sec-Q11, AA-1054): the Dev-only E2E staff identities of root ADR 0006a (A10, A10a, A10b,
+A10c, A10d, A10e x3, A10e-2, A10f, A10g, A10h: every address of the E2E mailbox domain) stop working on the day the
+pilot agency starts on Dev, not at go-live. Do this on the pilot day, before [Step 1](#step-1-provision-the-tenant).
+It removes no code: the E2E exceptions stay in the code until go-live (AA-1054 main scope).
+
+| Order | Who | Step | Expected |
+|---|---|---|---|
+| 1 | Tech lead | Open the CIS admin **Platform › Settings**, area **platform**, key `cis.platform.pilot_e2e_fence` (label "Pilot fence: refuse the Dev-only E2E staff accounts"). Propose `true` with a reason of at least 20 characters ("Pilot day: the pilot agency starts on Dev") and apply it. The registry records the proposal and the approval (maker-checker; a recorded self-approval while two-person approval is off). Only a real staff sign-in can do this: the E2E identities and the admin secret are refused on registry writes | The key shows `true`, source "platform", version 1 or higher |
+| 2 | Agent or tech lead | Wait one minute (CIS settings cache 30 s, Booking fence cache 30 s), then check that the fence holds: an E2E sign-in to the CIS admin ends on `/login?error=pilot_fence`; a Booking staff call with an E2E token answers 403 `e2e_pilot_fence`. Real staff sign in as usual | Both refusals seen; the tech lead's own sign-in works |
+| 3 | Agent | AA-CIS-Infra `tools/identity/e2e_identity_fence.py` (DRY RUN, the default; profile `aa365-admin`, MFA). It lists each E2E identity by code with a masked label, whether it is in the pool and whether it is enabled. No address is printed | Every known code listed; any `unmapped` row is an E2E-domain user the trigger does not name: note it, it is disabled in step 4 too |
+| 4 | Agent | The same tool with `--apply`: disables and signs out everywhere every enabled E2E user, then lists the pool again | Exit 0 and `done: every E2E user in the pool is disabled` |
+| 5 | Agent | Read-back: the DRY RUN once more | Every row in the pool reads `enabled: false` |
+| 6 | Agent | Note in the session log: the setting version, the tool output (codes and counts only) and the time | |
+
+After the pilot day these runs are expected to fail or skip, and that is not a regression (do not "fix" them by
+turning the fence off): AA-CIS-App **Cognito E2E**, **UI Smoke** (signed-in steps) and **Visual** (signed-in pages);
+AA-Booking **Visual** and the signed-in smoke of **Deploy Admin Dev**; AA-Partner **E2E Dev** (staff steps,
+A10c); every agent live check that signs in as an E2E identity (A10h included). Public smokes keep running. A CRM
+note: the CRM API does not read the fence yet (AA-1054 follow-up), so for A10c step 4 (the Cognito disable) is what
+stops it, on top of the pilot exclusion of [Before you start](#before-you-start) step 5.
+
+Undo, only if the pilot is called off and no real agency data is on Dev: set the key back to `false` and enable the
+users by hand (`aws cognito-idp admin-enable-user`, one per user).
 
 ## Step 1: provision the tenant
 
