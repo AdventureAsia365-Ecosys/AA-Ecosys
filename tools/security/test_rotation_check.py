@@ -886,6 +886,24 @@ class CliTest(unittest.TestCase):
         self.assertEqual(doc["coverage"], {"github:Demo-App": "ok"})
         self.assertIn("would create [red] Secret rotation: secretsmanager:acc2 demo/dev/overdue", buf.getvalue())
 
+    def test_aws_unavailable_is_one_coverage_finding(self):
+        import contextlib
+        import io
+        out = Path(tempfile.mkdtemp())
+        rc_github = rc.GitHub
+        try:
+            rc.GitHub = lambda token, **kw: rc_github(token, transport=FakeGitHub())
+            with contextlib.redirect_stdout(io.StringIO()):
+                code = rc.main(["--register", str(_tmp(REGISTER, ".yaml")), "--policy", str(_tmp(POLICY, ".toml")),
+                                "run", "--aws-unavailable", "role arn:aws:iam::123456789012:role/x not assumed",
+                                "--json-out", str(out / "due.json"), "--as-of", "2026-11-30"])
+        finally:
+            rc.GitHub = rc_github
+        self.assertEqual(code, 0)
+        doc = json.loads((out / "due.json").read_text(encoding="utf-8"))
+        self.assertTrue(doc["coverage"]["aws"].startswith("error: role <arn> not assumed"))
+        self.assertIn("source aws", {f["key"] for f in doc["findings"]})
+
     def test_inventory_round_trip_through_gzip_base64(self):
         inv = full_inventory()
         blob = gzip.compress(json.dumps({"sources": inv.sources, "github": inv.github}).encode())
@@ -949,6 +967,9 @@ class WorkflowTest(unittest.TestCase):
                          {"permission-secrets", "permission-environments"})
         run = next(s for s in jobs["check"]["steps"] if s.get("name") == "Check and sync the issues")["run"]
         self.assertIn("rotation_check.py run", run)
+        self.assertIn("--aws-unavailable", run)
+        creds = next(s for s in jobs["check"]["steps"] if s.get("id") == "aws")
+        self.assertTrue(creds["continue-on-error"])
         self.assertIn("--apply", run)
         self.assertIn("inputs.apply", jobs["check"]["env"]["APPLY"])
 

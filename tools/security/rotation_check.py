@@ -1003,6 +1003,8 @@ def main(argv: Optional[list] = None) -> int:
     run = sub.add_parser("run")
     run.add_argument("--github-inventory", type=Path, help="JSON written by collect-github")
     run.add_argument("--aws", action="store_true", help="read AWS metadata (credentials from the environment)")
+    run.add_argument("--aws-unavailable", metavar="REASON", default="",
+                     help="AWS could not be read this run (e.g. the role was not assumed): one coverage finding")
     run.add_argument("--rdap", action="store_true", help="look up domain expiry over RDAP")
     run.add_argument("--json-out", type=Path)
     run.add_argument("--summary", type=Path)
@@ -1040,6 +1042,8 @@ def main(argv: Optional[list] = None) -> int:
             inv.sources["github"] = "error: no GitHub inventory (collect-github did not run or had no token)"
         if args.aws:
             inv.merge(collect_aws(reg, policy, AwsCli()))
+        elif args.aws_unavailable:
+            inv.sources["aws"] = f"error: {redact(args.aws_unavailable)}"
         if args.rdap:
             inv.merge(collect_rdap(reg, policy))
         today = args.as_of or dt.datetime.now(dt.timezone.utc).date()
