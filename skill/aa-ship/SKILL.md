@@ -257,6 +257,12 @@ Thiếu bằng chứng nào → để In Review và ghi rõ còn thiếu gì. Li
 
 Deploy hỏng mà circuit breaker ECS không tự lùi → lùi app trước, sửa sau. DB không lùi theo app (migration chỉ tiến).
 
+- Tự lùi (AA-1119 web, AA-1193 API): post-deploy verify đỏ trên `main` → job `rollback` của workflow deploy tự lùi về
+  revision chạy trước deploy (API: hỏi lại deploy gate trước, CIS lùi api + worker cùng lúc, kiểm `/health` ra commit
+  cũ, gửi alert lên topic alerts kèm check đỏ) và giữ issue `deploy-smoke-red`. Gate giữ / refused / FAILED → lùi tay
+  theo runbook bên dưới. Drill API: dispatch Deploy Dev với `drill_force_smoke_fail` khi `main` đi trước bản Dev đang
+  chạy (merge một commit không deploy trước).
+
 - Mọi service ECS (CIS api/worker, Booking, CRM api/web/portal): runbook có tham số `docs/ops/runbooks/rollback-ecs.md`
   + helper `tools/ops/ecs_rollback.sh <service> --list | --previous | --to <rev> | --to-sha <sha>` (mặc định DRY RUN, in
   lệnh 1 dòng; `--apply` mới ghi, rồi chờ stable + so SHA ở health). Bỏ qua revision template Terraform (`bootstrap`).

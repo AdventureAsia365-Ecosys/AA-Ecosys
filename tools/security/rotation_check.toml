@@ -1,0 +1,51 @@
+# Weekly secret rotation and expiry check: windows, scope and issue settings (AA-1183 part 2).
+#
+# Read by tools/security/rotation_check.py. Every window, limit and cap of the check lives here, never as a constant in
+# the tool (tech lead S279: thresholds are settings). The root repo has no admin-editable settings yet: when the
+# compliance settings page exists (AA-1170), these values move there and this file becomes the seed (the same path as
+# tools/security/vuln_triage.toml). Change a value in a reviewed PR, together with the "Weekly rotation check" section
+# of docs/security/secrets-register.md.
+
+[windows]
+# A scheduled row turns AMBER this many days before its due date ...
+amber_days = 30
+# ... or this many days before it when its interval is at most short_interval_max_days (the 90-day items: IAM access
+# keys, personal access tokens).
+amber_days_short_interval = 14
+short_interval_max_days = 90
+# Anything with an expiry date (ACM and RDS certificates, domains, vendor tokens): AMBER from expiry_amber_days before
+# the expiry, RED from expiry_red_days before it (ACM renews 60 days ahead, so a certificate still on its old date 14
+# days before expiry was not renewed).
+expiry_amber_days = 30
+expiry_red_days = 14
+# Two dates of the same event may differ by a day (UTC versus local time in a hand-written date).
+date_tolerance_days = 1
+
+[issues]
+# One GitHub issue per finding in the root repo, deduplicated by title, closed when the row turns green.
+label = "secret-rotation"
+label_color = "b60205"
+label_description = "Opened and closed by the weekly Secret rotation check (tools/security/rotation_check.py)"
+# At most this many issue writes (create, edit, comment, close) per run; the rest wait for the next run.
+max_writes_per_run = 60
+
+[scope]
+# GitHub: the repos whose Actions secret metadata (names and updated_at only) the check reads.
+github_owner = "AdventureAsia365-Ecosys"
+github_repos = ["AA-Ecosys", "AA-CIS-App", "AA-Booking", "AA-Partner", "AA-TripPlanner-Web", "AA-CIS-Infra"]
+# AWS: the account label of the register stores the check reads live (secretsmanager:<label>, kms:<label>,
+# iam:<label>); rows of other labels are checked from the register dates only. Region of Secrets Manager, Cognito,
+# KMS and RDS; ACM regions come from the acm:<region> stores.
+aws_account_label = "acc2"
+aws_region = "us-west-1"
+
+[rdap]
+# Domain expiry: RDAP (RFC 9083), the "expiration" event. A domain whose registry has no RDAP service in the IANA
+# bootstrap needs its own base URL here (domain = "https://<registry rdap>/domain/"); when the lookup fails the check
+# uses the register's hand-written `expires` and says so in the row's notes.
+default_base = "https://rdap.org/domain/"
+timeout_seconds = 20
+
+[rdap.overrides]
+# it.com second-level names are not in the IANA bootstrap (.com answers 404); the it.com registry serves its own RDAP.
+"lumiguides.it.com" = "https://rdap.it.com/domain/"

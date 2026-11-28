@@ -56,7 +56,33 @@ Since AA-1119 (S282 audit R32) the four web deploy workflows roll back by themse
 - What to do: read the failed job, then fix forward on `main` (step 7). Do not move the service back to the bad
   revision by hand. The configuration check (step 4) is not run by the automatic path: the target is the revision that
   ran minutes earlier.
-- The CIS and Booking APIs and the CRM API keep the manual procedure below (their deploys carry job tables and gates).
+
+Since AA-1193 (S295 Well-Architected review, OPS06) the three API deploy workflows roll back by themselves too:
+AA-CIS-App `deploy-dev.yml` (`aa-cis-dev-api` and `aa-cis-dev-worker` together), AA-Booking `deploy-dev.yml`
+(`aa-booking-dev-api`) and AA-Partner `deploy-dev.yml` (`aa-crm-dev-api`). Same mechanism, with what an API needs on
+top:
+
+- The deploy job records the previous revision before `update-service` (CIS: the api and worker revision numbers).
+- When the post-deploy verify fails on `main` after a successful deploy, job `rollback` first asks the deploy gate
+  again ([deploy gate](deploy-gate-override.md): job tables, open waves, the ECS exec heartbeat on CIS), with the run's
+  `override_running_jobs` reason if the dispatch gave one. A held gate rolls nothing back: the run, the alert and the
+  issue say "held by the deploy gate"; roll back by hand with this page once the gate is clear.
+- Otherwise `.github/scripts/ecs_api_rollback.py rollback --apply` moves every service back, all or none (a refused
+  worker keeps the CIS api where it is: one image; CIS api and worker whose previous revisions are different builds
+  are refused too), waits `services-stable`, checks the running image, and then the
+  public health URL (`/health`, `/booking/health`, `/crm/health`) must answer the previous commit in `git_sha`.
+- One message goes to the alerts SNS topic (the ops topic of every alarm): the app, the commit, the failing checks
+  and the rollback outcome, subject `[aa-deploy] <app> Dev: post-deploy check red, rolled back` (or `not rolled
+  back`, `ROLLBACK FAILED`). Job `report` keeps the `deploy-smoke-red` issue as for the web apps.
+- Never a loop: the rollback is an `update-service` to a revision that already exists. It builds, pushes and
+  dispatches nothing, so it cannot start another deploy; a re-run finds the services back and writes nothing.
+- Drill: dispatch Deploy Dev on `main` with `drill_force_smoke_fail` ticked. The verify runs every real check, then
+  turns red on purpose (row `drill-forced-fail`), so the real rollback, alert and issue run; the subject reads
+  `[aa-deploy drill]`. It needs `main` ahead of what Dev runs: merge a commit that does not deploy (docs only) first;
+  otherwise the deploy job refuses the drill before the roll.
+- After an automatic API rollback: read the failed check (the alert names it) and fix forward on `main`. The
+  database is not rolled back (migrations only go forward); the previous build runs on the newer schema, which expand
+  migrations keep working (root ADR 0017).
 
 ## Parameters
 

@@ -248,6 +248,46 @@ class LegalChecksTest(unittest.TestCase):
         self.assertTrue((ROOT / cfg["retention_log"]).exists())
 
 
+class OpsCalendarCheckTest(unittest.TestCase):
+    """AA-1184: the ops calendar check is red the day a line is past due, green once it is done, and the drill flag
+    makes it red for one run."""
+
+    CAL = ("version: 1\nupdated: 2026-11-20\nitems:\n"
+           "  - id: OC-001\n    kind: deadline\n    title: Renew the widget licence\n    owner: tech lead\n"
+           "    source: Invented\n    date: {due}\n    warn_days: 3\n    reminder: auto\n{done}")
+
+    def _root(self, d: str, due: str, done: str = "") -> Path:
+        root = _tree(Path(d))
+        (root / "docs" / "ops").mkdir(parents=True, exist_ok=True)
+        (root / "docs" / "ops" / "calendar.yaml").write_text(self.CAL.format(due=due, done=done), encoding="utf-8")
+        return root
+
+    def test_a_past_due_line_is_red_and_done_turns_it_green(self):
+        with tempfile.TemporaryDirectory() as d:
+            red = c.check_ops_calendar(self._root(d, "2026-11-20"), NOW.date(), CFG)
+        self.assertEqual((red["status"], red["detail"]["overdue"]), ("fail", 1))
+        self.assertTrue(red["link"].endswith("/docs/ops/calendar.md"))
+        with tempfile.TemporaryDirectory() as d:
+            green = c.check_ops_calendar(self._root(d, "2026-11-20", "    done: 2026-11-19\n"), NOW.date(), CFG)
+        self.assertEqual((green["status"], green["detail"]["overdue"]), ("pass", 0))
+
+    def test_the_drill_run_is_red_and_says_so(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = self._root(d, "2026-12-31")
+            self.assertEqual(c.check_ops_calendar(root, NOW.date(), CFG)["status"], "pass")
+            b = c.collect(None, CFG, root, NOW, None, None, drill_overdue=True)
+        check = next(x for x in b["checks"] if x["check_id"] == "ops_calendar_overdue")
+        self.assertEqual((check["status"], check["detail"]["drill"]), ("fail", True))
+        self.assertIn("OC-999", check["summary"])
+        self.assertEqual(c.assert_publishable(b), [])
+
+    def test_the_real_calendar_check_publishes_cleanly(self):
+        check = c.check_ops_calendar(c.ROOT, NOW.date(), CFG)
+        self.assertIn(check["status"], ("pass", "fail"))
+        self.assertLessEqual(len(json.dumps(check["detail"]).encode()), 8192)
+        self.assertEqual(c.assert_publishable({"checks": [check]}), [])
+
+
 class BundleTest(unittest.TestCase):
     def test_offline_bundle_shape(self):
         with tempfile.TemporaryDirectory() as d:
@@ -270,7 +310,9 @@ class BundleTest(unittest.TestCase):
         self.assertEqual(states["repo_branch_protection"], "error")
         self.assertEqual(states["last_restore_drill"], "pass")
         self.assertEqual(states["legal_ropa_reviewed"], "pass")
-        self.assertEqual(len(states), 13)   # 5 remote + 4 registers + erasure drill + 2 legal (AA-1174) + heartbeat
+        self.assertEqual(states["ops_calendar_overdue"], "error")   # the invented tree has no calendar file
+        # 5 remote + 4 registers + erasure drill + ops calendar (AA-1184) + 2 legal (AA-1174) + heartbeat
+        self.assertEqual(len(states), 14)
 
     def test_forbidden_text_refuses_the_file(self):
         bad = {"checks": [{"summary": "role arn:aws:iam::" + "1" * 12 + ":role/x"}]}

@@ -1232,6 +1232,35 @@ the only home of a person's Booking role and Booking reads it from the token).
   applied when every job table is idle) -> schema-reference PR -> CIS and Booking code -> hand step (the content +
   operations staff member moves to the custom roles). Spec: `.kiro/specs/AA-1155-custom-staff-roles/`.
 
+### A15. Pilot fence: one CIS setting refuses every Dev-only E2E identity in CIS and Booking, and the E2E users are disabled on the pilot day (28/11/2026, S297; AA-1054)
+
+Amends A10 ... A10h (every Dev-only E2E exception stays in the code until go-live; this adds the switch that turns them
+all off at once).
+
+- **Why:** tech lead S295 (sec-Q11): the Dev-only E2E identities are disabled on the day the pilot agency (ADR 0019
+  d16) starts on Dev, not at go-live, behind one shared fence.
+- **Switch:** the CIS platform setting `cis.platform.pilot_e2e_fence` (CIS 495; bool, default off, maker-checker,
+  high impact, no env override), edited and audited on Platform › Settings. One switch for both apps, so they cannot
+  disagree.
+- **Who:** every row or token address of the E2E mailbox domain, any local part (A10 ... A10h, a future E2E address,
+  a look-alike). Real staff never read the switch.
+- **CIS:** `api/core/pilot_fence.py`; the resolver refuses such a session 403 `e2e_pilot_fence` before every other E2E
+  rule, and `e2e_staff.dev_only_e2e_environment()` answers False, so the other E2E exceptions close too. The sign-in
+  page shows `/login?error=pilot_fence`. Fail closed like Booking: while a task cannot read the switch (no settings
+  snapshot yet or since start-up, or the stored value refused) the same identities get 403 `e2e_pilot_fence_unknown`
+  and the exceptions stay closed. The academy (`/learn/v1`, the one staff token path outside the resolver) refuses
+  them too.
+- **Booking:** reads the value in force through the read-only contract view `catalog.v_pilot_fence_v1` (CIS 496,
+  SELECT to `booking` only; the CIS 415 settings precedent, not a grant on the settings tables). Refused 403
+  `e2e_pilot_fence`, or 403 `e2e_pilot_fence_unknown` when the view cannot be read (fail closed, E2E identities only).
+- **Cognito:** AA-CIS-Infra `tools/identity/e2e_identity_fence.py` lists the E2E users by code (DRY RUN by default,
+  no address printed) and, with `--apply`, disables and signs them out, then reads back. Pilot day only.
+- **Order:** setting on, check the refusals, tool DRY RUN, `--apply`, read-back (runbook
+  `docs/ops/runbooks/pilot-agency-onboarding.md`, "Pilot day"). The signed-in E2E suites are expected to fail or skip
+  from then on.
+- **Not yet:** the CRM API (A10c) does not read the fence; the Cognito disable stops A10c, on top of the CRM's own
+  pilot exclusion (AA-1086).
+
 ## Phase 1 status (18/10/2026)
 
 | Item | State |

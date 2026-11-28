@@ -25,12 +25,20 @@ superseded or undated page is an error. ``last_erasure_drill`` publishes the dat
 the retention and erasure run log. CIS grades them (cis.compliance.legal_docs_overdue_max,
 cis.compliance.erasure_drill_max_age_days).
 
+AA-1184 (S297, ops calendar): ``ops_calendar_overdue`` evaluates docs/ops/calendar.yaml for the run's UTC day
+(tools/ops/ops_calendar.py): ``fail`` when a line is past its due date and not done, ``pass`` otherwise, ``error`` when
+the calendar does not validate. Its detail carries every line (compact "|"-separated rows, under the 8 KiB limit) for
+the Calendar tab of CIS Platform › Compliance readiness. ``--drill-overdue`` adds one deliberately past-due line for a
+single run (the live proof that the check turns red; the detail says ``drill: true``). The secrets register line needs
+PyYAML (the workflow installs it); the evaluation itself is the calendar's, never a threshold of this file.
+
 Public repo rules (root advisory section 4 C.5): the run prints counts only, never raw API output; detail holds counts,
 dates, repo names and workflow names, never an account ID, an ARN, a bucket name or a person; :func:`assert_publishable`
 refuses to write a file that carries one (the workflow then fails instead of publishing).
 
     python3 tools/compliance/collect.py --out _out/evidence.json      # GITHUB_TOKEN in the environment
     python3 tools/compliance/collect.py --out F --offline             # repo-local checks only (tests, a fork)
+    python3 tools/compliance/collect.py --out F --drill-overdue       # AA-1184 drill: the ops calendar check red
 
 Stdlib only. Exit 0 = file written (failing checks are results, not errors), 2 = the file would carry forbidden text.
 """
@@ -365,6 +373,22 @@ def check_vuln_exceptions(root: Path, today: date) -> dict:
                   {"exceptions": len(rows), "expired": expired})
 
 
+OPS_CALENDAR_LINK = "docs/ops/calendar.md"
+
+
+def check_ops_calendar(root: Path, today: date, cfg: dict, drill: bool = False) -> dict:
+    """AA-1184: the ops calendar for today (status from tools/ops/ops_calendar.py; red when a line is overdue)."""
+    ops = ROOT / "tools" / "ops"   # the tool of this checkout; ``root`` is the tree it evaluates
+    if str(ops) not in sys.path:
+        sys.path.insert(0, str(ops))
+    import ops_calendar   # noqa: PLC0415 - sibling tool folder; stdlib + PyYAML for the secrets register line
+
+    doc = ops_calendar.load(root)
+    status, summary, detail = ops_calendar.evidence_detail(doc, today, root, drill=drill)
+    link = GITHUB_BLOB.format(org=cfg["org"], repo=cfg["root_repo"], path=OPS_CALENDAR_LINK)
+    return result("ops_calendar_overdue", status, summary, detail, link)
+
+
 # ── the file ───────────────────────────────────────────────────────────────────────────────────────────────────────
 
 
@@ -375,7 +399,7 @@ def assert_publishable(bundle: dict) -> list[str]:
 
 
 def collect(fetch: Optional[Fetch], cfg: dict, root: Path, now: datetime, version: Optional[str],
-            run_ref: Optional[str]) -> dict:
+            run_ref: Optional[str], drill_overdue: bool = False) -> dict:
     today = now.date()
     checks: list[dict] = []
     remote = (("repo_branch_protection", lambda: check_branch_protection(fetch, cfg)),
@@ -387,7 +411,8 @@ def collect(fetch: Optional[Fetch], cfg: dict, root: Path, now: datetime, versio
              ("last_restore_drill", lambda: check_last_drill(root)),
              ("last_access_review", lambda: check_last_access_review(root)),
              ("vuln_exceptions_valid", lambda: check_vuln_exceptions(root, today)),
-             ("last_erasure_drill", lambda: check_last_erasure_drill(root, cfg["retention_log"], cfg)))
+             ("last_erasure_drill", lambda: check_last_erasure_drill(root, cfg["retention_log"], cfg)),
+             ("ops_calendar_overdue", lambda: check_ops_calendar(root, today, cfg, drill_overdue)))
     skip = tuple(cfg["docs_skip_status"])
     local += tuple((cid, (lambda c=cid, pages=pages: check_legal_doc(root, c, pages, today, skip, cfg)))
                    for cid, pages in cfg.get("legal_docs", {}).items())
@@ -408,13 +433,16 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
     ap.add_argument("--out", required=True)
     ap.add_argument("--offline", action="store_true", help="repo-local checks only (no GitHub reads)")
+    ap.add_argument("--drill-overdue", action="store_true",
+                    help="AA-1184 drill: add one deliberately past-due line to the ops calendar check for this run")
     args = ap.parse_args(argv)
     cfg = load_config()
     fetch = None if args.offline else github_fetch(os.environ.get("GITHUB_TOKEN"))
     run_ref = None
     if os.environ.get("GITHUB_RUN_NUMBER"):
         run_ref = f"compliance-evidence #{os.environ['GITHUB_RUN_NUMBER']}"
-    bundle = collect(fetch, cfg, ROOT, datetime.now(timezone.utc), os.environ.get("GITHUB_SHA"), run_ref)
+    bundle = collect(fetch, cfg, ROOT, datetime.now(timezone.utc), os.environ.get("GITHUB_SHA"), run_ref,
+                     drill_overdue=args.drill_overdue)
     bad = assert_publishable(bundle)
     if bad:
         print(f"refused: the evidence file would carry {', '.join(bad)}", file=sys.stderr)

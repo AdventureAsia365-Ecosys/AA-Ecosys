@@ -175,57 +175,47 @@ aws secretsmanager delete-secret --secret-id aa-ecosys/github/aa-agent-app-key -
    | Issues | Read and write (release-please labels) |
    | Metadata | Read-only |
    | Pull requests | Read and write |
+   | Actions | Read-only (the root CI hygiene run reads the caches of the six repos) |
+   | Secrets | Read-only (the weekly Secret rotation check lists secret names and `updated_at`; the API never returns a value) |
+   | Environments | Read-only (the same check, for environment secrets) |
 
-   No Actions, no Workflows, no organization permissions, no webhook, **Only on this account**.
+   No Workflows, no write on Actions, Secrets or Environments, no organization permissions, no webhook, **Only on this
+   account**. Adding a permission later: App settings → **Permissions & events** → save, then accept the update on
+   the org installation (org Settings → **GitHub Apps** → **Configure** → **Review request**).
 
 2. Repeat part 2 (one private key) and part 3 (install on the same five repos; `AA-Ecosys` is needed because the
    Infra docs workflows open PRs there).
-3. In each public app repo (`AA-CIS-App`, `AA-Booking`, `AA-TripPlanner-Web`) create the environment `release`:
-   repo Settings → **Environments** → **New environment** → name `release` → **Deployment branches and tags** →
-   **Selected branches and tags** → add rule `main` → **Save protection rules**.
-4. Store the key as a secret in each consuming repo, then the App ID as a variable. Run each line once per repo.
+3. One environment per repo holds the key (AA-1183): `ci-bot`, deployment branches = the default branch only
+   (`master` in `AA-Ecosys`, `main` elsewhere), no required reviewers, no wait timer. The App id is the repo variable
+   `AA_CI_BOT_APP_ID` (an identifier). Never at repo level: the key can write to the child repos, and a repo-level
+   secret is readable by a workflow edited on any pushed branch, whatever its `if:` says. Every job that mints a
+   ci-bot token names `environment: ci-bot`.
+4. Create the six environments, store the key and set the variable in one go (dry run first, then `--apply`; the key
+   is read from the file by `gh`, never printed):
 
    ```bash
-   gh secret set AA_CI_BOT_PRIVATE_KEY --repo AdventureAsia365-Ecosys/AA-CIS-App --env release < /mnt/c/Users/<windows-user>/Downloads/<pem-file> # WRITE
-   gh secret set AA_CI_BOT_PRIVATE_KEY --repo AdventureAsia365-Ecosys/AA-Booking --env release < /mnt/c/Users/<windows-user>/Downloads/<pem-file> # WRITE
-   gh secret set AA_CI_BOT_PRIVATE_KEY --repo AdventureAsia365-Ecosys/AA-TripPlanner-Web --env release < /mnt/c/Users/<windows-user>/Downloads/<pem-file> # WRITE
-   gh secret set AA_CI_BOT_PRIVATE_KEY --repo AdventureAsia365-Ecosys/AA-CIS-Infra < /mnt/c/Users/<windows-user>/Downloads/<pem-file> # WRITE
-   gh variable set AA_CI_BOT_APP_ID --repo AdventureAsia365-Ecosys/AA-CIS-App --body <ci-bot-app-id> # WRITE
-   gh variable set AA_CI_BOT_APP_ID --repo AdventureAsia365-Ecosys/AA-Booking --body <ci-bot-app-id> # WRITE
-   gh variable set AA_CI_BOT_APP_ID --repo AdventureAsia365-Ecosys/AA-TripPlanner-Web --body <ci-bot-app-id> # WRITE
-   gh variable set AA_CI_BOT_APP_ID --repo AdventureAsia365-Ecosys/AA-CIS-Infra --body <ci-bot-app-id> # WRITE
+   bash tools/security/ci_bot_key_consolidate.sh plan
+   bash tools/security/ci_bot_key_consolidate.sh setup --pem /mnt/c/Users/<windows-user>/Downloads/<pem-file>
+   bash tools/security/ci_bot_key_consolidate.sh setup --pem /mnt/c/Users/<windows-user>/Downloads/<pem-file> --apply --shred # WRITE
    ```
 
-   AA-CIS-Infra is private on GitHub Free, so its environments cannot hold a branch rule (ADR 0014); the secret is
-   repo-level there and every job that reads it carries `if: github.ref == 'refs/heads/main'`.
-
-   Root repo `AA-Ecosys` (public), for the daily CI hygiene run (`.github/workflows/ci-hygiene.yml`, root ADR 0021
-   decision 5 layer 3): create the environment `ci-hygiene` with **Selected branches and tags** → rule `master` first,
-   then store the key in that environment only. Never at repo level: the key can write to the child repos, and a
-   repo-level secret is readable by a workflow edited on any pushed branch, whatever its `if:` says. That workflow
-   mints its token with only Actions, Contents and Pull requests **read**; it needs the App permission
-   **Actions: Read-only** (an addition to the table in step 1, accepted on the org installation).
-
-   ```bash
-   gh secret set AA_CI_BOT_PRIVATE_KEY --repo AdventureAsia365-Ecosys/AA-Ecosys --env ci-hygiene < /mnt/c/Users/<windows-user>/Downloads/<pem-file> # WRITE
-   gh variable set AA_CI_BOT_APP_ID --repo AdventureAsia365-Ecosys/AA-Ecosys --body <ci-bot-app-id> # WRITE
-   ```
-
+   Before AA-1183 the key sat in environment `release` (four app repos), `ci-hygiene` (root) and at repo level
+   (AA-CIS-Infra); `ci_bot_key_consolidate.sh cleanup --apply` deletes those copies once every job that reads the
+   key runs in `ci-bot`. It refuses earlier, and also whenever a workflow list or file cannot be read
+   (`tools/security/ci_bot_workflows_ready.py` fails closed).
 5. Shred the `.pem` as in part 4 step 2.
 
 Verify (names only, no values):
 
 ```bash
-gh secret list --repo AdventureAsia365-Ecosys/AA-Booking --env release
-gh secret list --repo AdventureAsia365-Ecosys/AA-CIS-Infra
-gh variable list --repo AdventureAsia365-Ecosys/AA-Booking
+bash tools/security/ci_bot_key_consolidate.sh plan
 ```
 
-Expected: `AA_CI_BOT_PRIVATE_KEY` and `AA_CI_BOT_APP_ID` are listed. The first real use is the release-please
-workflow of AA-891.
+Expected: every repo shows the `ci-bot` environment with branches `[branch:<default branch>]`, rules
+`[branch_policy]`, key `set`, and the repo variable `set`.
 
-Rollback: `gh secret delete AA_CI_BOT_PRIVATE_KEY --repo <repo> [--env release]`, then delete the App (part 1
-rollback).
+Rollback: delete the `ci-bot` environment secret of each repo (repo Settings → **Environments** → `ci-bot`), then
+delete the App (part 1 rollback).
 
 ## 6. Identity test PR (Done-when of AA-901)
 
@@ -253,7 +243,7 @@ Add these rows to [`secrets-register.yaml`](secrets-register.yaml) and the table
 | Name | Store | Status |
 |---|---|---|
 | `aa-ecosys/github/aa-agent-app-key` | `secretsmanager:acc2` | keep |
-| `AA_CI_BOT_PRIVATE_KEY` | `github:AA-CIS-App/release`, `github:AA-Booking/release`, `github:AA-TripPlanner-Web/release`, `github:AA-CIS-Infra` | keep once a workflow reads it (AA-891, Infra docs switch) |
+| `AA_CI_BOT_PRIVATE_KEY` | `github:<repo>/ci-bot` for each of the six repos (AA-1183; before: `github:<app repo>/release`, `github:AA-Ecosys/ci-hygiene`, `github:AA-CIS-Infra`) | keep |
 | GitHub App `aa-agent` (keys, installation) | `vendor:github` | keep |
 | GitHub App `aa-ci-bot` (keys, installation) | `vendor:github` | keep |
 
@@ -275,7 +265,7 @@ two kinds of PR; every other PR it opens is merged by a person or the orchestrat
   checks are green.
 - No app repo workflow mints a token for AA-CIS-Infra or the root repo. The one cross-repo app token is AA-CIS-App
   `kit-sync.yml` (ADR 0016 decision 6, AA-994 S3s): one token per consumer app repo (AA-Partner, AA-Booking,
-  AA-TripPlanner-Web), Contents + Pull requests write, `release` environment (main only); it opens `bot/kit-sync`
+  AA-TripPlanner-Web), Contents + Pull requests write, `ci-bot` environment (main only); it opens `bot/kit-sync`
   PRs and never merges them (ADR 0011a decision 3).
 - Check: `gh pr view <n> --repo <repo> --json mergedBy --jq .mergedBy.login` shows `app/aa-ecosys-ci-bot`.
 - Stop: revert the workflow change, or suspend the installation (part "Emergency stop").
@@ -284,15 +274,17 @@ two kinds of PR; every other PR it opens is merged by a person or the orchestrat
 
 No reinstall. Org Settings → **GitHub Apps** → **Configure** next to the App → **Select repositories** → add the
 repo → **Save** (each App). Then add the repo to the lists in this page and in ADR 0011 if it changes the scope, and
-for `aa-ecosys-ci-bot` store `AA_CI_BOT_PRIVATE_KEY` there too (a new key from the App page, part 5 step 4).
+for `aa-ecosys-ci-bot` add the repo to `REPOS` in `tools/security/ci_bot_key_consolidate.sh` and run its `setup`
+with a new key from the App page (part 5 step 4), which also refreshes the other repos.
 
 ## Rotate a key
 
-Trigger: a possible leak, go-live (AA-880), or someone who could read it leaves (ADR 0011 decision 5). No calendar
-rotation on Dev.
+Trigger: a possible leak, go-live (AA-880), someone who could read it leaves (ADR 0011 decision 5), or the register's
+365-day schedule (secrets register v2, class `scheduled`; the weekly Secret rotation check opens an issue 30 days
+ahead).
 
 1. App settings → **Private keys** → **Generate a private key** (the old key keeps working).
-2. Store the new key: for `aa-agent`, `aws secretsmanager put-secret-value --secret-id aa-ecosys/github/aa-agent-app-key --secret-string file://<new-pem-path> --profile aa365-admin --region us-west-1 # WRITE`; for `aa-ci-bot`, the `gh secret set` lines of part 5.
+2. Store the new key: for `aa-agent`, `aws secretsmanager put-secret-value --secret-id aa-ecosys/github/aa-agent-app-key --secret-string file://<new-pem-path> --profile aa365-admin --region us-west-1 # WRITE`; for `aa-ci-bot`, `bash tools/security/ci_bot_key_consolidate.sh setup --pem <new-pem-path> --apply` (part 5 step 4).
 3. Verify: `tools/github/as-app.sh -- gh api /installation/repositories --jq '.repositories | length'` prints `5`
    (`aa-agent`), or re-run the release workflow (`aa-ci-bot`).
 4. Delete the old key on the App page (match the fingerprint), then shred the new `.pem`.

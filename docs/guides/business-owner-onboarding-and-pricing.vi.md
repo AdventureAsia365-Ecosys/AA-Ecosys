@@ -446,6 +446,14 @@ flowchart LR
 - **Giá đại lý** = giá theo quy tắc trừ mức giảm theo hạng hoặc thẻ giá của đại lý.
 - **Giá tạm** và **giá tham khảo CIS** là gợi ý cho nhân sự. Không bao giờ là giá bán.
 
+**Tiền tệ: chỉ USD.** Hệ thống hiển thị và chấp nhận một loại tiền là USD. Những loại tiền nào được mở do một cài đặt
+quyết định, **Enabled currencies**, ở CIS **Platform › Settings** (nhóm billing; quản trị viên đổi và người thứ hai
+duyệt). Khi chỉ USD được bật, CIS Plans & add-ons, Tenant 360, trang billing của Content studio, hoá đơn nháp phí phần
+mềm trong Booking và phần proposal, cài đặt thanh toán, giá AA trong CRM không hiện loại tiền nào khác, và mọi thao tác
+ghi bằng loại tiền khác bị từ chối. Đại lý đã lưu VND trước đây được báo giá và lập hoá đơn bằng USD; giá trị đã lưu
+quay lại nếu bật lại VND. Hợp đồng và giá nhà cung cấp giữ loại tiền riêng: Booking quy đổi sang USD theo tỷ giá đã
+duyệt (C5).
+
 Quy tắc duyệt. Người làm không bao giờ tự duyệt việc của mình, trừ một ngoại lệ: chủ doanh nghiệp, khi công tắc "The
 business owner may approve her own work" đang bật. Mỗi lần như vậy được đánh dấu và liệt kê ở tab nhật ký
 **Business-owner self-approvals** (Chủ doanh nghiệp tự duyệt). Công tắc này và công tắc chi trả nằm ở **Supply ›

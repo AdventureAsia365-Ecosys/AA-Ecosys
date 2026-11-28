@@ -173,6 +173,8 @@ repositories (on public repositories anyone's PR could run code on them).
   create the root environment `ci-hygiene` with deployment branches limited to `master`, store the secret
   `AA_CI_BOT_PRIVATE_KEY` in that environment (never at repo level: the key can write to the child repos) and set the
   root repo variable `AA_CI_BOT_APP_ID`, so the daily hygiene run reads every repo's caches (until then it opens a
-  "needs permission" issue that says the same; steps in docs/security/github-apps.md part 5).
+  "needs permission" issue that says the same; steps in docs/security/github-apps.md part 5). Note (S297, AA-1183):
+  the key moved to the environment `ci-bot` (same rule: master only, no required reviewers), one per repo for every
+  ci-bot workflow; `ci-hygiene` is retired.
 - Monthly C8 review: runner minutes per phase, cache use per repo, Actions storage.
 - Re-check the private-on-Free feature table against GitHub's plan documentation before any visibility decision.

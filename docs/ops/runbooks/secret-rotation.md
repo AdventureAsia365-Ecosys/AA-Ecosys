@@ -40,6 +40,10 @@ row before its date. Secrets Manager rotation is enabled on 0 of the secrets; ev
 
 The secrets register (AA-878): `docs/security/secrets-register.md` and `.yaml` (names, consumers, copies, status;
 never values). Look up the secret's row first: it names every copy (GitHub, Vercel, Lambda) that must change with it.
+The weekly Secret rotation check (root `.github/workflows/secret-rotation.yml`) opens one issue labelled
+`secret-rotation` per overdue, unknown or missing item and closes it once the row is green in a run that read its
+store (a week where AWS or GitHub could not be read leaves those issues open); it trusts the GitHub
+`updated_at`, Cognito client secret and IAM key dates, so a copy you forgot shows up as stale the following Monday.
 
 ## Preconditions
 
@@ -80,17 +84,20 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
    then restart again. Vendor keys: re-enable the old key at the vendor if it was revoked.
 6. Revoke the old value at the source once the new one works (vendor keys).
 
-### 2. RDS logins (master `aa-cis/dev/rds`, `cis_app`, `db_migrator`, `crm_app`, `aa_app_user`, Booking and TripPlanner DSNs)
+### 2. RDS logins (the RDS-managed master, `cis_app`, `db_migrator`, `crm_app`, `aa_app_user`, Booking and TripPlanner DSNs)
 
-- Master: Terraform ignores password changes, so the rotation is "change the password, then the secret, then every
-  reader". Scheduled for prod (D-03); after X1 the master is break-glass only (DM-8.9). Plan it in AA-880, do not
-  improvise it on Dev.
-- `cis_app`, `db_migrator` and `crm_app` (the `password_roles` of AA-CIS-Infra `db/owners.yaml`; secrets
-  `aa-cis/dev/rds-cis-app`, `aa-cis/dev/db-migrator`, `crm/dev/database-url`): the tech lead writes the new DSN into
-  the role's secret; then [DB Migrate](db-migrate.md) `mode=set-password` with that role sets the password from the
-  secret and test-connects. Then restart the services that read it (`crm_app`: `aa-crm-dev-api`).
-- Other logins (`aa_app_user`, Booking, TripPlanner) are not in `set-password`: plan their rotation in AA-880.
-- Rollback: write the previous DSN back and run `set-password` again.
+- Master: since AA-1182 (S297) RDS manages the master password (secret `rds!db-<id>`, rotated every 180 days by RDS;
+  no copy anywhere else). An extra rotation is the [key ceremony](key-ceremony.md) step 1a (`modify-db-instance
+  --rotate-master-user-password --apply-immediately`); then DB Migrate `mode=run-script` `db/scripts/session_info.py`
+  must log the RDS-managed master login. No app logs in as the master (DM-8.9), so nothing restarts. The old hand-kept
+  DSN `aa-cis/dev/rds` is a fallback only until it is deleted. The one-time switch (two targeted applies, evidence run,
+  deletes) and its recovery steps: [key ceremony, switch the master to RDS management](key-ceremony.md#before-the-day-switch-the-master-to-rds-management).
+- `cis_app`, `db_migrator`, `crm_app`, `aa_app_user`, `booking` and `tripplanner` (the `password_roles` of
+  AA-CIS-Infra `db/owners.yaml`): a new password goes into the role's DSN secret through a pipe
+  (`tools/security/dsn_new_password.py`, command in the [key ceremony](key-ceremony.md), group 1b); then
+  [DB Migrate](db-migrate.md) `mode=set-password` with that role sets the password from the secret and
+  test-connects. Then restart the services that read it (table in the key ceremony, group 1b).
+- Rollback: move the secret's `AWSCURRENT` back to the previous version and run `set-password` again.
 
 ### 3. Cognito app client secrets (`cis-admin`, `booking-staff`, `breakglass`, `crm-staff`, `cis-portal`, `partner-web`, M2M clients)
 
@@ -98,10 +105,11 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
   `identity_partner.tf` or `identity_m2m.tf`. The secrets live in Terraform state and in Secrets Manager (register
   rows; the staff admins read `aa-cis/dev/admin-web` / `booking/dev/admin-web`, refilled by AA-CIS-Infra
   `tools/identity/staff_web_secret.py`, then force a new deployment of that admin service). The `-preview` clients
-  were deleted with the Vercel retirement (AA-911, S272). Rotation needs a Cognito client secret rotation and an update of every copy in the same
-  window; sign-in breaks in between. UNTESTED, planned with the AA-816 cutover. Rollback:
-  the previous client secret stays valid until it is deleted, if the rotation adds a second secret instead of
-  replacing it.
+  were deleted with the Vercel retirement (AA-911, S272). Rotation (all seven clients rotated by hand in S296):
+  AA-CIS-Infra `tools/identity/client_secret_rotate.py add --client <client> --apply`, which stores the new value from
+  the `AddUserPoolClientSecret` response (Describe returns no secret once a client has rotated secrets, lesson S296),
+  then the printed restart, a sign-in or M2M check, then `retire --client <client> --keep <new-secret-id> --apply`.
+  Rollback: until `retire`, both secrets are valid; move the stored copy back and restart.
 
 ### 4. Break-glass (`aa-identity/dev/breakglass`)
 
@@ -123,7 +131,9 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
   stdin, never from an argument), run the workflow that uses it, then revoke the old token.
 - GitHub App keys (`aa-agent`, `aa-ecosys-ci-bot`; register rows) replaced the root-repo PAT in S247. Rotate a key on
   a leak or at go-live ([ADR 0011](../../adr/0011-github-app-identity-and-merge-rights.md)): create a new private key
-  in the App settings, update its copies, then delete the old key.
+  in the App settings, update its copies, then delete the old key. The `aa-ecosys-ci-bot` key has one copy per repo,
+  in the environment `ci-bot`: `bash tools/security/ci_bot_key_consolidate.sh setup --pem <new key file> --apply
+  --shred` stores the new key in all six, then delete the old key in the App settings.
 
 ### 7. CRM encryption keys (KMS)
 

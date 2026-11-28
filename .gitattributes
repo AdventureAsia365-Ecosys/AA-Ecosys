@@ -1,0 +1,2 @@
+# AA-1184: the ops calendar feed is generated with CRLF line endings (RFC 5545); keep its bytes as written.
+docs/ops/calendar.ics -text

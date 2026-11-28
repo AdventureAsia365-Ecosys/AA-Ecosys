@@ -55,6 +55,7 @@
    "route:b2b_addons",
    "route:b2b_desk",
    "route:b2b_partners",
+   "route:b2b_tariff",
    "route:catalog",
    "route:docs",
    "route:finance",
@@ -733,6 +734,10 @@
    "area": "billing"
   },
   "cis.billing.combo_products": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.enabled_currencies": {
    "app": "cis",
    "area": "billing"
   },
@@ -1465,6 +1470,10 @@
    "area": "ops"
   },
   "cis.platform.admin_mfa_required": {
+   "app": "cis",
+   "area": "platform"
+  },
+  "cis.platform.pilot_e2e_fence": {
    "app": "cis",
    "area": "platform"
   },
