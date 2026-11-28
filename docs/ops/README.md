@@ -40,9 +40,16 @@ Everything runs on **acc2** (us-west-1) except the Bedrock LLM calls, which run 
 ## Without the agent
 
 - [Run the platform without the agent](run-without-agent.md): deploy, roll back and apply a migration with the GitHub
-  web UI and one-line AWS CLI commands, with the tested state of each path (draft, never run runbook-only yet).
-- [Security tabletop script](drills/security-tabletop.md): 60 minutes, two scenarios, one real low-risk rotation.
-- [Access register](../security/access-register.md): who holds each account, with the second key-holder.
+  web UI and one-line AWS CLI commands, rotate a key, handle an incident and who calls whom, with the tested state of
+  each path (draft, never run runbook-only yet).
+- [Runbook-only deploy and rollback drill](drills/runbook-only-deploy-rollback.md): the Booking admin deployed, rolled
+  back and rolled forward by a person, numbered steps with a timing table.
+- [Security tabletop script](drills/security-tabletop.md): 60 minutes with the business owner: who calls whom, a real
+  break-glass sign-in test, the CRM key rotation walk-through, a leaked-secret talk-through.
+- [Turn on the second alert channel](runbooks/chat-alert-channel.md): alarms into a Slack channel (Amazon Q Developer in
+  chat applications, free, off until switched on), the e-mail fallback recipient, the business owner's page alerts.
+- [Access register](../security/access-register.md): who holds each account, with the second key-holder; tested with
+  the [second key-holder checklist](../security/second-key-holder-checklist.md).
 
 ## Runbooks
 
@@ -71,6 +78,7 @@ Everything runs on **acc2** (us-west-1) except the Bedrock LLM calls, which run 
 | [Use a break-glass path](runbooks/break-glass.md) | draft, UNTESTED | API path 2026-10-18 |
 | [Handle an SES bounce or complaint alarm](runbooks/ses-bounce.md) | draft, UNTESTED | read-only only |
 | [Handle an ACM certificate expiry alert](runbooks/certificate-expiry.md) | draft, UNTESTED | - (AA-1183) |
+| [Turn on the second alert channel (Slack through Amazon Q Developer, e-mail fallback, page alerts)](runbooks/chat-alert-channel.md) | draft, UNTESTED | - (AA-1110) |
 | [Handle a CRM KMS key alarm](runbooks/crm-keys.md) | draft, UNTESTED | rule patterns only (AA-932) |
 | [Plug in and probe the Anthropic API key](runbooks/llm-anthropic-api-key.md) | draft, UNTESTED | - (AA-1002 S2) |
 | [Re-embed a vector column into another embedding space](runbooks/embedding-re-embed.md) | draft, UNTESTED | - (AA-1026; T-15 test on `question_embedding` pending) |
