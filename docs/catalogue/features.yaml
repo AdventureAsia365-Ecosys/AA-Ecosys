@@ -496,6 +496,8 @@ features:
     roles: [admin]
     status: live
     surface: ["page:/admin/platform/staff/**", "page:/admin/platform/roles", "route:admin_platform", "route:admin_platform_roles", "route:admin_view_as"]
+    conditions:
+      settings: [cis.platform.pilot_e2e_fence]
     depends_on: [INF-F001]
     owner: tech_lead
   - id: CIS-F034

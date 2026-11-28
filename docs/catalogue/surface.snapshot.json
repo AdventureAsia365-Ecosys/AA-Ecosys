@@ -1468,6 +1468,10 @@
    "app": "cis",
    "area": "platform"
   },
+  "cis.platform.pilot_e2e_fence": {
+   "app": "cis",
+   "area": "platform"
+  },
   "cis.publish.daily_limit_default": {
    "app": "cis",
    "area": "publish"
